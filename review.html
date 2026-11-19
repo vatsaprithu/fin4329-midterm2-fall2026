@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<title>FIN 4329 Midterm 2 — Review your missed questions</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f7f9fc;color:#1a1a1a;font:16px/1.6 Arial,sans-serif}
+main{max-width:960px;margin:auto;padding:28px 24px 60px}header{background:#1f3864;color:white;padding:24px;margin-bottom:24px}
+h1{font-size:26px;margin:0 0 8px}header p{margin:0}h2{font-size:20px;color:#1f3864}h3{font-size:17px}
+label{display:block;font-weight:bold;margin-top:16px}input{font:inherit;max-width:100%;padding:9px;border:1px solid #667085}
+input[type=password]{display:block;width:350px}button{font:inherit;font-weight:bold;padding:12px 20px;background:#1f3864;color:white;border:0;margin-top:20px;cursor:pointer}
+button:disabled{background:#667085}button:focus-visible,input:focus-visible{outline:3px solid #2e75b6;outline-offset:3px}
+#status{font-weight:bold;color:#b42318}#summary{border-top:2px solid #1f3864;margin-top:26px;padding-top:16px}
+.question{padding:16px 0 24px;border-bottom:1px solid #a8b4c5;break-inside:avoid}.question h2{margin-bottom:4px}
+.recorded{font-weight:bold;background:#fdecea;padding:10px 14px;color:#8f1c13}.choices{padding-left:26px}
+.choices li{padding:4px 0}.data{border-collapse:collapse;width:auto;max-width:100%;margin:12px 0;font-size:15px}
+.data th,.data td{border:1px solid #a8b4c5;padding:5px 9px;text-align:left}.data th{background:#eef2f8}
+.table-scroll{overflow-x:auto}.hint{color:#454f60;font-size:14px}.hidden{display:none}
+@media print{#openForm,header p,.intro{display:none}body{background:white}main{max-width:none;padding:0}header{background:white;color:#1f3864;padding:0}}
+</style></head><body><main>
+<header><h1>FIN 4329 Midterm 2 review</h1><p>Review your recorded answers. New exam attempts are closed.</p></header>
+<div class="intro"><p>Select the original Midterm 2 JSON you submitted to Blackboard and enter the original exam access code supplied by your instructor or TA.</p>
+<p>The page shows your missed questions with your original answer choices. <strong>Class question numbers</strong> match the instructor's key, and <strong>your question numbers</strong> match your exam order.</p>
+<p>For your corrections, write the class question number, corrected answer text and explanation on your sheet.</p></div>
+<form id="openForm">
+<label for="examFile">Your submitted Midterm 2 JSON file</label>
+<input id="examFile" type="file" accept=".json,application/json" required>
+<label for="examCode">Original exam access code</label>
+<input id="examCode" type="password" autocomplete="off" required>
+<p class="hint">Your file is read in this browser. Its contents stay on your device.</p>
+<button type="submit" id="openBtn">Show my missed questions</button>
+</form>
+<p id="status" role="status" aria-live="polite"></p>
+<section id="summary" class="hidden" aria-label="Submitted exam summary"></section>
+<section id="questions" aria-label="Missed exam questions"></section>
+<script>
+const ENCRYPTED_QUESTIONS = "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";
+const PBKDF2_ITERATIONS = 200000;
+const EXAM_ID = "FIN4329 Midterm 2 Fall 2026";
+let QUESTIONS = null;
+function hashSeed(str) {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+  return h;
+}
+function mulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function shuffled(arr, rnd) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+function buildOrder(email) {
+  const rnd = mulberry32(hashSeed("mt2|" + email.toLowerCase()));
+  const raw = shuffled(QUESTIONS.map((_, i) => i), rnd);
+  const order = [], placed = new Set();
+  raw.forEach(i => {
+    if (placed.has(i)) return;
+    const g = QUESTIONS[i].group;
+    const members = g ? QUESTIONS.map((q, k) => q.group === g ? k : -1).filter(k => k >= 0) : [i];
+    members.forEach(k => { order.push(k); placed.add(k); });
+  });
+  const choiceOrders = {};
+  QUESTIONS.forEach((q, qi) => {
+    const idx = q.choices.map((_, ci) => ci);
+    choiceOrders[qi] = q.fixedOrder ? idx : shuffled(idx, rnd);
+  });
+  return { order, choiceOrders };
+}
+
+
+async function decryptExam(password) {
+  const blob = Uint8Array.from(atob(ENCRYPTED_QUESTIONS), c => c.charCodeAt(0));
+  const salt = blob.slice(0, 16), iv = blob.slice(16, 28), ciphertext = blob.slice(28);
+  const enc = new TextEncoder();
+  const baseKey = await crypto.subtle.importKey("raw", enc.encode(password), { name: "PBKDF2" }, false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt, iterations: PBKDF2_ITERATIONS, hash: "SHA-256" },
+    baseKey, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+  const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, ciphertext);
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+
+
+function canonicalRecord(s) {
+  return {
+    exam: s.exam, name: s.name, email: s.email,
+    startTime: new Date(s.startTime).toISOString(), submittedAt: s.submittedAt,
+    autoSubmitted: !!s.autoSubmitted, answers: s.answers, order: s.order,
+    correctCount: s.correctCount, total: s.total, scorePct: s.scorePct,
+    events: s.events || []
+  };
+}
+
+
+async function sha256Hex(text) {
+  const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(bytes), byte => byte.toString(16).padStart(2, "0")).join("");
+}
+
+function validateRecord(record) {
+  if (record.exam !== EXAM_ID || !record.submittedAt || !record.email || !record.name) {
+    throw new Error("Choose the original submitted FIN 4329 Midterm 2 JSON file from Blackboard.");
+  }
+  if (record.total !== 25 || !Array.isArray(record.order) || record.order.length !== 25 ||
+      new Set(record.order).size !== 25 || record.order.some(i => !Number.isInteger(i) || i < 0 || i >= 25)) {
+    throw new Error("The question order in this file is incomplete. Download the original submission from Blackboard.");
+  }
+  if (!record.answers || typeof record.answers !== "object" ||
+      record.order.some(i => !Number.isInteger(record.answers[i]) || record.answers[i] < -1 || record.answers[i] > 3)) {
+    throw new Error("The answer record is incomplete. Download the original submission from Blackboard.");
+  }
+  if (!Number.isFinite(Date.parse(record.startTime)) || !Number.isFinite(Date.parse(record.submittedAt))) {
+    throw new Error("The submission dates in this file could not be read.");
+  }
+}
+
+function renderMissed(record) {
+  const choiceOrders = buildOrder(record.email).choiceOrders;
+  const summary = document.getElementById("summary");
+  summary.replaceChildren();
+  const title = document.createElement("h2");
+  title.textContent = record.name + " — submitted score " + record.correctCount + " / " + record.total;
+  summary.appendChild(title);
+  const note = document.createElement("p");
+  note.textContent = "Missed questions: " + (record.total - record.correctCount) + ". Your submitted answers are fixed for this review.";
+  summary.appendChild(note);
+  summary.classList.remove("hidden");
+  const questions = document.getElementById("questions");
+  questions.replaceChildren();
+  record.order.forEach((masterIndex, displayIndex) => {
+    const question = QUESTIONS[masterIndex];
+    const chosen = record.answers[masterIndex];
+    if (chosen === question.a) return;
+    const section = document.createElement("article");
+    section.className = "question";
+    section.dataset.masterQuestion = String(masterIndex + 1);
+    section.dataset.studentQuestion = String(displayIndex + 1);
+    const heading = document.createElement("h2");
+    heading.textContent = "Class question " + (masterIndex + 1) + " · Your question " + (displayIndex + 1);
+    section.appendChild(heading);
+    const stem = document.createElement("div");
+    stem.className = "table-scroll";
+    stem.innerHTML = (question.scenario || "") + question.q;
+    stem.querySelectorAll("th").forEach(cell => cell.setAttribute("scope", "col"));
+    section.appendChild(stem);
+    const choices = document.createElement("ol");
+    choices.type = "A";
+    choices.className = "choices";
+    choiceOrders[masterIndex].forEach(originalChoice => {
+      const item = document.createElement("li");
+      item.textContent = question.choices[originalChoice];
+      if (originalChoice === chosen) {
+        item.className = "recorded";
+        item.appendChild(document.createTextNode(" — Your recorded answer (incorrect)"));
+      }
+      choices.appendChild(item);
+    });
+    section.appendChild(choices);
+    if (chosen === -1) {
+      const unanswered = document.createElement("p");
+      unanswered.className = "recorded";
+      unanswered.textContent = "No answer was selected for this question.";
+      section.appendChild(unanswered);
+    }
+    questions.appendChild(section);
+  });
+  if (record.correctCount === record.total) {
+    const message = document.createElement("p");
+    message.textContent = "All your recorded answers were correct.";
+    questions.appendChild(message);
+  }
+  summary.scrollIntoView({ block: "start" });
+}
+
+document.getElementById("openForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  const status = document.getElementById("status");
+  const button = document.getElementById("openBtn");
+  const file = document.getElementById("examFile").files[0];
+  const password = document.getElementById("examCode").value.trim();
+  status.textContent = "";
+  document.getElementById("summary").classList.add("hidden");
+  document.getElementById("questions").replaceChildren();
+  if (!file || !password) { status.textContent = "Select your exam JSON and enter the original exam access code."; return; }
+  button.disabled = true;
+  button.textContent = "Checking your submitted exam…";
+  try {
+    let record;
+    try { record = JSON.parse(await file.text()); }
+    catch { throw new Error("This file could not be read as JSON. Select your original Blackboard submission."); }
+    validateRecord(record);
+    let exam;
+    try { exam = await decryptExam(password); }
+    catch { throw new Error("The exam access code was not accepted. Ask your instructor or TA for the original Midterm 2 code."); }
+    const seal = await sha256Hex(exam.integrity + "|" + JSON.stringify(canonicalRecord(record)));
+    if (seal !== record.integrity) throw new Error("The file integrity check failed. Download the unchanged original submission from Blackboard.");
+    QUESTIONS = exam.questions;
+    const correct = QUESTIONS.filter((question, index) => record.answers[index] === question.a).length;
+    if (correct !== record.correctCount || Math.round(1000 * correct / record.total) / 10 !== record.scorePct) {
+      throw new Error("The score in this file differs from the exam key. Ask your instructor to review the submission.");
+    }
+    renderMissed(record);
+    status.textContent = "Your submitted exam has been verified and opened for review.";
+  } catch (error) {
+    status.textContent = error.message;
+  } finally {
+    button.disabled = false;
+    button.textContent = "Show my missed questions";
+  }
+});
+</script></main></body></html>

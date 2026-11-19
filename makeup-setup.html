@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>FIN 4329 makeup setup check</title><style>body{font:18px/1.6 Arial;max-width:760px;margin:auto;padding:28px;color:#1a1a1a}
+button{font:inherit;padding:12px;background:#1f3864;color:white;border:0}button:focus-visible{outline:3px solid #14804a;outline-offset:4px}</style>
+<h1>FIN 4329 makeup setup check</h1><p id="status" role="status"></p>
+<ol><li>Confirm that Safe Exam Browser is detected below.</li><li>Download the sample JSON file.</li>
+<li>Use Safe Exam Browser's Quit button and enter <strong>practice4329</strong>.</li>
+<li>Confirm that FIN4329_Makeup_Setup_Check.json is in Downloads. Tell Debanik if it is missing.</li></ol>
+<button id="download" type="button">Download sample JSON</button><div id="downloads" aria-live="polite"></div>
+<p>This setup check is ungraded. The makeup exam has 25 questions and a 90-minute timer that starts at Begin.</p>
+<script>const inSeb=/\bSEB\b|SafeExamBrowser/i.test(navigator.userAgent)||typeof window.SafeExamBrowser!=="undefined";
+document.getElementById("status").textContent=inSeb?"Safe Exam Browser detected. Continue with the download check.":"Open FIN4329_MT2_Makeup_SetupCheck.seb in Safe Exam Browser to complete this check.";
+document.getElementById("download").onclick=()=>requestJSONFile("FIN4329_Makeup_Setup_Check.json",JSON.stringify({exam:"FIN4329 makeup setup check",ungraded:true,downloadedAt:new Date().toISOString()},null,2),document.getElementById("downloads"));
+// JSON export stays on this device. Genuine links remain usable if an automatic
+// request is refused. Blob objects are kept alive for this document's lifetime;
+// early revocation can race native WebKit's asynchronous download handling.
+function jsonDataURL(text) {
+  const bytes=new TextEncoder().encode(text);
+  let binary='';for(let i=0;i<bytes.length;i++)binary+=String.fromCharCode(bytes[i]);
+  return 'data:application/json;charset=utf-8;base64,'+encodeURIComponent(btoa(binary));
+}
+function requestJSONFile(filename,text,host,autoRequest=true) {
+  if(!host)throw Error('Download controls are unavailable. Keep this page open and contact the proctor.');
+  let controls=document.getElementById('jsonDownloadAlternatives');
+  if(!controls){controls=document.createElement('div');controls.id='jsonDownloadAlternatives';host.appendChild(controls);}
+  controls.replaceChildren();
+  const note=document.createElement('p');
+  note.textContent='The file is prepared locally. If the automatic request does not save it, click Save JSON below. If that is blocked, try the compatibility download. Confirm the file exists after authorized exit; this page cannot verify a disk save.';
+  controls.appendChild(note);
+  const blobURL=URL.createObjectURL(new Blob([text],{type:'application/json'}));
+  const primary=document.createElement('a');primary.id='jsonDownloadLink';primary.href=blobURL;primary.download=filename;primary.textContent='Save JSON';
+  const alternate=document.createElement('a');alternate.id='jsonCompatibilityLink';alternate.href=jsonDataURL(text);alternate.download=filename;alternate.textContent='Compatibility JSON download';
+  for(const link of [primary,alternate]){
+    link.style.cssText='display:inline-block;margin:0 12px 12px 0;padding:12px;border:2px solid #111;color:#111;background:#fff;font-weight:bold;text-decoration:underline;';
+    link.setAttribute('aria-label',link.textContent+' — '+filename);controls.appendChild(link);
+  }
+  if(autoRequest)primary.click();
+  return {filename,blobURL,compatibilityURL:alternate.href,requested:!!autoRequest};
+}
+</script></html>

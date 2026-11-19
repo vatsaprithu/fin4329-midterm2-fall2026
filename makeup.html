@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="googlebot" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIN 4329 — Bank Lending | Midterm Exam 2 Makeup</title>
+<style>
+  :root {
+    --brand:#1F3864; --brand-light:#2E75B6; --accent:#f0a500;
+    --bg:#f7f9fc; --card:#ffffff; --border:#d5dde8;
+    --ok:#14804a; --ok-bg:#e3f5ec;
+    --err:#b42318; --err-bg:#fdecea;
+    --muted:#667085;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    background:var(--bg); color:#1a1a1a; line-height:1.5;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none;
+  }
+  input, textarea { -webkit-user-select:text; -moz-user-select:text; -ms-user-select:text; user-select:text; }
+  .wrap { max-width:820px; margin:0 auto; padding:28px 20px 80px; transition: max-width .2s; }
+  body.quiz-active .wrap { max-width:1200px !important; }
+  header.banner {
+    background:linear-gradient(135deg,var(--brand),var(--brand-light));
+    color:white; padding:28px 24px; border-radius:12px;
+    margin-bottom:20px; box-shadow:0 4px 14px rgba(31,56,100,.15);
+  }
+  header.banner h1 { margin:0 0 6px; font-size:22px; font-weight:700; }
+  header.banner p { margin:0; opacity:.92; font-size:14px; }
+  .card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:10px; padding:22px 24px; margin-bottom:18px;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  h2 { color:var(--brand); font-size:18px; margin:0 0 12px; }
+  h3 { color:var(--brand); font-size:15px; margin:0 0 6px; }
+  label { font-weight:600; font-size:14px; display:block; margin-bottom:6px; }
+  input[type="text"], input[type="email"] {
+    width:100%; padding:10px 12px; font-size:15px; font-family:inherit;
+    border:1px solid var(--border); border-radius:6px; transition:border-color .15s;
+  }
+  input:focus { outline:none; border-color:var(--brand-light); box-shadow:0 0 0 3px rgba(46,117,182,.15); }
+  .form-row { margin-bottom:14px; }
+  button {
+    background:var(--brand); color:white; border:none;
+    padding:12px 24px; font-size:15px; font-weight:600;
+    border-radius:6px; cursor:pointer; font-family:inherit;
+    transition:background .15s;
+  }
+  button:hover { background:var(--brand-light); }
+  button:disabled { background:#aaa; cursor:not-allowed; }
+  .q {
+    padding:16px 18px; border:1px solid var(--border);
+    border-radius:8px; margin-bottom:16px; background:#fff;
+  }
+  .q.correct { background:var(--ok-bg); border-color:var(--ok); }
+  .q.incorrect { background:var(--err-bg); border-color:var(--err); }
+  .q-num { color:var(--brand-light); font-size:13px; font-weight:700; margin-bottom:4px; }
+  .q-text { font-size:15px; margin-bottom:10px; font-weight:500; }
+  .choices label {
+    display:block; padding:8px 12px; border:1px solid var(--border);
+    border-radius:6px; margin-bottom:6px; cursor:pointer; font-weight:400;
+    font-size:14px; background:#fafbfd; transition:all .1s;
+  }
+  .choices label:hover { background:#eef2f8; }
+  .choices input { margin-right:8px; }
+  .choices label.correct-ans { background:var(--ok-bg); border-color:var(--ok); font-weight:600; }
+  .choices label.wrong-ans { background:var(--err-bg); border-color:var(--err); }
+
+  /* ===== One-at-a-time quiz layout ===== */
+  .q-single { display:none; }
+  .q-single.active { display:block; }
+  .q-layout {
+    display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:start;
+  }
+  .q-left { }
+  .q-right { }
+  .scenario-box {
+    background:#f0f4f8; border:1px solid var(--border); border-left:4px solid var(--brand);
+    border-radius:8px; padding:14px 16px; margin-bottom:14px; font-size:13.5px; line-height:1.55;
+    max-height:400px; overflow-y:auto;
+  }
+  .scenario-box strong { color:var(--brand); }
+  .q-nav {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-top:18px; padding-top:14px; border-top:1px solid var(--border);
+  }
+  .q-nav button { min-width:120px; }
+  .q-nav .progress { font-size:13px; color:var(--muted); font-weight:600; }
+  .q-dots {
+    display:flex; gap:6px; flex-wrap:wrap; justify-content:center;
+    margin:10px 0;
+  }
+  .q-dots .dot {
+    width:28px; height:28px; border-radius:50%; border:2px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:700; cursor:pointer; transition:all .15s;
+    background:#fff; color:var(--muted);
+  }
+  .q-dots .dot.current { border-color:var(--brand); background:var(--brand); color:#fff; }
+  .q-dots .dot.answered { border-color:var(--ok); background:var(--ok-bg); color:var(--ok); }
+  .q-dots .dot.answered.current { background:var(--brand); color:#fff; }
+  .q-dots .dot.locked { border-color:#999; background:#e0e0e0; color:#666; opacity:.7; }
+  @media (max-width:800px) {
+    .q-layout { grid-template-columns:1fr; }
+  }
+  .explanation {
+    margin-top:10px; padding:10px 14px; background:#fff;
+    border-left:3px solid var(--brand-light); font-size:13px; color:#333; border-radius:4px;
+  }
+  .result-hero {
+    padding:30px 24px; text-align:center; border-radius:10px; margin-bottom:18px;
+  }
+  .result-hero.pass { background:var(--ok-bg); border:2px solid var(--ok); }
+  .result-hero.fail { background:var(--err-bg); border:2px solid var(--err); }
+  .result-hero .big { font-size:48px; font-weight:800; margin:8px 0; }
+  .result-hero.pass .big { color:var(--ok); }
+  .result-hero.fail .big { color:var(--err); }
+  .result-hero .label {
+    display:inline-block; padding:6px 16px; border-radius:20px;
+    font-weight:700; font-size:14px; letter-spacing:.5px;
+  }
+  .result-hero.pass .label { background:var(--ok); color:white; }
+  .result-hero.fail .label { background:var(--err); color:white; }
+  .muted { color:var(--muted); font-size:13px; }
+  .warn {
+    background:#fff8e1; border-left:4px solid var(--accent);
+    padding:12px 14px; margin:12px 0; font-size:14px; border-radius:4px;
+  }
+  .rules {
+    background:#fee; border:2px solid var(--err);
+    padding:16px 20px; margin:14px 0; border-radius:8px;
+  }
+  .rules h3 { color:var(--err); margin-bottom:8px; }
+  .rules ul { margin:8px 0; padding-left:22px; }
+  .rules li { margin-bottom:6px; font-size:14px; }
+  .info-grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0;
+  }
+  .info-pill {
+    background:#eef2f8; padding:10px 14px; border-radius:6px; font-size:13px;
+  }
+  .info-pill strong { display:block; color:var(--brand); margin-bottom:2px; }
+  .hidden { display:none !important; }
+  .deadline-ticker {
+    background:var(--brand); color:white; text-align:center;
+    padding:8px; font-size:13px; font-weight:600; border-radius:6px; margin-bottom:14px;
+  }
+  .countdown-good { background:var(--ok); }
+  .countdown-warn { background:var(--accent); color:#111; }
+  .countdown-closed { background:var(--err); }
+  .violations {
+    background:#fff0f0; border:1px solid var(--err); padding:8px 12px;
+    border-radius:6px; font-size:12px; color:var(--err); margin:10px 0;
+  }
+  .agree-row { margin-top:14px; padding:12px; background:#f7f9fc; border-radius:6px; }
+  .agree-row label { display:flex; align-items:flex-start; gap:8px; font-size:14px; font-weight:400; cursor:pointer; }
+  .agree-row input[type="checkbox"] { margin-top:3px; }
+  @media (max-width:600px) {
+    .info-grid { grid-template-columns:1fr; }
+    .result-hero .big { font-size:36px; }
+  }
+
+  /* ===== Built-in Calculator / Scratchpad (during quiz only) ===== */
+  #calcPanel {
+    position: fixed; top: 90px; right: 20px; width: 280px;
+    background: #fff; border: 2px solid var(--brand); border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.15); z-index: 9999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    display: none;
+  }
+  #calcPanel.open { display: block; }
+  #calcPanel .header {
+    background: var(--brand); color: white; padding: 8px 12px;
+    border-radius: 8px 8px 0 0; font-weight: 700; font-size: 13px;
+    display: flex; justify-content: space-between; align-items: center;
+    cursor: move;
+  }
+  #calcPanel .body { padding: 10px; }
+  #calcInput, #calcScratch {
+    width: 100%; font-family: "Courier New", monospace; font-size: 14px;
+    padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px;
+  }
+  #calcScratch { height: 120px; resize: vertical; margin-top: 6px; }
+  #calcResult {
+    padding: 8px 10px; margin-top: 6px; background: #eef2f8;
+    border-radius: 4px; font-family: "Courier New", monospace; font-size: 16px;
+    font-weight: 700; color: var(--brand); text-align: right; min-height: 20px;
+  }
+  #calcPanel .hint {
+    font-size: 11px; color: var(--muted); margin-top: 4px;
+  }
+  #calcPanel button.close-x {
+    background: transparent; color: white; border: none; font-size: 18px;
+    padding: 0 4px; cursor: pointer;
+  }
+  #calcPanel .keys {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 6px;
+  }
+  #calcPanel .keys button {
+    padding: 8px 0; font-size: 14px; background: #f0f2f5;
+    color: #111; border: 1px solid #d0d6df; border-radius: 4px; cursor: pointer;
+  }
+  #calcPanel .keys button:hover { background: #e0e4eb; }
+  #calcPanel .keys button.op { background: #e6eef8; color: var(--brand); font-weight: 700; }
+  #calcPanel .keys button.clear { background: #fdecea; color: var(--err); font-weight: 700; }
+  #calcToggle {
+    position: fixed; top: 20px; right: 20px; z-index: 9998;
+    background: var(--brand); color: white; border: none;
+    padding: 10px 16px; font-size: 14px; font-weight: 700;
+    border-radius: 6px; cursor: pointer; display: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  }
+  #calcToggle.visible { display: block; }
+
+  /* ===== Timer bar during quiz ===== */
+  #timerBar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10000;
+    padding: 10px 16px; background: var(--brand); color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    font-size: 15px; font-weight: 700; text-align: center;
+    display: none; box-shadow: 0 2px 8px rgba(0,0,0,.25);
+  }
+  #timerBar.visible { display: block; }
+  #timerBar.warning { background: var(--accent); color: #111; animation: pulse 1s infinite; }
+  #timerBar.expired { background: var(--err); color: white; animation: pulse 0.6s infinite; }
+  @keyframes pulse { 0%{opacity:1;} 50%{opacity:.7;} 100%{opacity:1;} }
+  body.quiz-active { padding-top: 44px; }
+
+  .q-text table.data { border-collapse: collapse; margin: 10px 0; font-size: 14px; }
+  .q-text table.data th, .q-text table.data td { border: 1px solid var(--border); padding: 4px 10px; text-align: right; }
+  .q-text table.data th:first-child, .q-text table.data td:first-child { text-align: left; }
+  .q-text table.data caption { text-align:left; font-weight:600; margin:6px 0; }
+  .q-text table.data th { background: #eef2f8; }
+  .submitted-box { text-align: center; padding: 28px 20px; }
+  .submitted-box .big { font-size: 40px; font-weight: 800; color: var(--brand); }
+  /* toggles sit below the fixed timer bar during the exam */
+  body.quiz-active #calcToggle { top: 52px; }
+  #sheetToggle {
+    position: fixed; top: 20px; right: 160px; z-index: 9998;
+    background: #14804a; color: white; border: none; padding: 10px 16px; font-size: 14px; font-weight: 700;
+    border-radius: 6px; cursor: pointer; display: none; box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  }
+  body.quiz-active #sheetToggle { top: 52px; }
+  #sheetToggle.visible { display: block; }
+  #sheetPanel {
+    position: fixed; top: 100px; left: 20px; width: 880px; height: 440px; min-width: 360px; min-height: 200px;
+    background: #fff; border: 2px solid #14804a; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,.2);
+    z-index: 9999; display: none; flex-direction: column; resize: both; overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  }
+  #sheetPanel.open { display: flex; }
+  #sheetHeader { background: #14804a; color: #fff; padding: 6px 10px; cursor: move; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 14px; }
+  #sheetHeader button { background: transparent; color: #fff; border: none; font-size: 18px; cursor: pointer; padding: 0 4px; }
+  #sheetBar { display: flex; gap: 6px; align-items: center; padding: 5px 8px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  #sheetRef { min-width: 46px; font-weight: 700; color: #14804a; white-space: nowrap; }
+  #sheetFx { flex: 1; font-family: Consolas, monospace; font-size: 13px; padding: 4px 6px; border: 1px solid var(--border); border-radius: 4px; }
+  #sheetGridWrap { flex: 1; overflow: auto; }
+  #sheetGrid { border-collapse: collapse; font-size: 13px; }
+  #sheetGrid th { background: #eef2f8; border: 1px solid #c9d2df; font-weight: 600; color: #444; padding: 2px 4px; position: sticky; top: 0; z-index: 1; min-width: 28px; }
+  #sheetGrid th.rowh { position: sticky; left: 0; z-index: 2; }
+  #sheetGrid td { border: 1px solid #d5dde8; padding: 0; }
+  #sheetGrid input { width: 84px; border: none; padding: 3px 5px; font-size: 13px; text-align: right; font-family: inherit; background: transparent; }
+  #sheetGrid input:focus { outline: 2px solid #14804a; background: #f3fbf6; text-align: left; }
+  #sheetGrid input.err { color: var(--err); }
+  #sheetGrid input.sel { background: #dcefe3; }
+  #sheetGrid input.sel:focus { background: #f3fbf6; }
+  #sheetFillBtns { font-size: 12px; color: #444; white-space: nowrap; }
+  #sheetFillBtns button { padding: 3px 8px; font-size: 13px; margin-left: 2px; background: #eef2f8; color: #1f2d3d; border: 1px solid #c9d2df; border-radius: 4px; }
+  #sheetTip { height: 18px; font: 12px/18px Consolas, monospace; color: #333; border-bottom: 1px solid var(--border); padding: 1px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #sheetTip.show { background: #fffbe6; }
+  #sheetTip b { color: #14804a; }
+  #sheetHint { font-size: 11px; color: var(--muted); padding: 3px 8px; border-top: 1px solid var(--border); }
+  button:focus-visible, input:focus-visible, textarea:focus-visible { outline:3px solid #1F3864; outline-offset:3px; }
+</style>
+</head>
+<body oncontextmenu="return false;" oncopy="return false;" oncut="return false;" onpaste="return false;">
+
+<!-- ===== Timer + Built-in Calculator / Scratchpad ===== -->
+<div id="timerBar">Time remaining</div>
+<button id="calcToggle" onclick="document.getElementById('calcPanel').classList.toggle('open')">🧮 Calculator</button>
+<div id="calcPanel">
+  <div class="header" id="calcHeader">
+    <span>🧮 Calculator &amp; Scratchpad</span>
+    <button aria-label="Close calculator" class="close-x" onclick="document.getElementById('calcPanel').classList.remove('open')">×</button>
+  </div>
+  <div class="body">
+    <input type="text" id="calcInput" aria-label="Calculator expression" placeholder="Type an expression, then press Enter" autocomplete="off">
+    <div id="calcResult">0</div>
+    <div class="keys">
+      <button onclick="calcAppend('7')">7</button><button onclick="calcAppend('8')">8</button><button onclick="calcAppend('9')">9</button><button class="op" onclick="calcAppend('/')">÷</button>
+      <button onclick="calcAppend('4')">4</button><button onclick="calcAppend('5')">5</button><button onclick="calcAppend('6')">6</button><button class="op" onclick="calcAppend('*')">×</button>
+      <button onclick="calcAppend('1')">1</button><button onclick="calcAppend('2')">2</button><button onclick="calcAppend('3')">3</button><button class="op" onclick="calcAppend('-')">−</button>
+      <button onclick="calcAppend('0')">0</button><button onclick="calcAppend('.')">.</button><button onclick="calcEval()">=</button><button class="op" onclick="calcAppend('+')">+</button>
+      <button onclick="calcAppend('(')">(</button><button onclick="calcAppend(')')">)</button><button class="clear" onclick="calcBackspace()">⌫</button><button class="clear" onclick="calcClear()">C</button>
+    </div>
+    <div class="hint">Examples: <code>6570000/365</code>, <code>(720+540)-(410+120)</code></div>
+    <textarea id="calcScratch" aria-label="Calculation scratchpad" placeholder="Scratchpad — use this for multi-step work."></textarea>
+  </div>
+</div>
+
+<!-- ===== Built-in Spreadsheet ===== -->
+<button id="sheetToggle" onclick="toggleSheet()">📊 Spreadsheet</button>
+<div id="sheetPanel">
+  <div id="sheetHeader"><span>📊 Spreadsheet (drag to move, corner to resize)</span><button aria-label="Close spreadsheet" onclick="toggleSheet(false)">×</button></div>
+  <div id="sheetBar"><span id="sheetRef">A1</span><input id="sheetFx" aria-label="Spreadsheet value or formula" placeholder="Value or formula, e.g. =B2*C2/365 or =SUM(B2:B5)" autocomplete="off"><span id="sheetFillBtns">Fill <button type="button" onmousedown="event.preventDefault()" onclick="sheetFill('down')" title="Fill down (Ctrl+D): copies the top cell of the selection into the cells below">↓</button><button type="button" onmousedown="event.preventDefault()" onclick="sheetFill('up')" title="Fill up: copies the bottom cell of the selection into the cells above">↑</button><button type="button" onmousedown="event.preventDefault()" onclick="sheetFill('right')" title="Fill right (Ctrl+R): copies the left cell of the selection into the cells to its right">→</button><button type="button" onmousedown="event.preventDefault()" onclick="sheetFill('left')" title="Fill left: copies the right cell of the selection into the cells to its left">←</button></span><button type="button" onclick="sheetClear()" style="padding:4px 10px;font-size:12px;background:#fdecea;color:var(--err);">Clear all</button></div>
+  <div id="sheetTip" aria-live="polite"></div>
+  <div id="sheetGridWrap"><table id="sheetGrid"></table></div>
+  <div id="sheetHint">Formulas start with = &nbsp;•&nbsp; + - * / ^ % ( ) &nbsp;•&nbsp; ranges like B2:B5 &nbsp;•&nbsp; $ locks a reference: $B$1 &nbsp;•&nbsp; Enter = down, Tab = right &nbsp;•&nbsp; F2 or double-click edits a cell<br>Select cells (drag or Shift+click), then Ctrl+D fills down, Ctrl+R fills right, or use the Fill buttons &nbsp;•&nbsp; Ctrl+Enter fills the selection &nbsp;•&nbsp; Ctrl+Z undoes &nbsp;•&nbsp; on a Mac use Control, not Command<br>While typing a formula, click or drag over cells to insert them &nbsp;•&nbsp; SUM AVERAGE MIN MAX SUMPRODUCT ROUND ROUNDUP INT ABS EXP IF &nbsp;•&nbsp; PMT RATE NPER PV FV (type =PV( to see its arguments)</div>
+</div>
+
+<div class="wrap">
+
+  <header class="banner">
+    <h1>FIN 4329 — Bank Lending | Midterm Exam 2 Makeup</h1>
+    <p>Fall 2026 • Chapters 6, 6A, 7, 8 and 8A • 25 questions • 90 minutes • One attempt</p>
+  </header>
+
+  <div id="deadlineBar" class="deadline-ticker"></div>
+
+  <!-- ============ LANDING ============ -->
+  <div id="landing" class="card">
+    <h2>Before You Begin</h2>
+    <p>This makeup covers Chapters 6, 6A, 7, 8 and 8A. It is open notes. Each question is worth 1 point.</p>
+
+    <div class="info-grid">
+      <div class="info-pill"><strong>Exam window</strong>At the appointment agreed with your proctor. Your proctor provides the access code when you are ready.</div>
+      <div class="info-pill"><strong>Time limit</strong>90 minutes from Begin. The timer continues if you close or reopen the page.</div>
+      <div class="info-pill"><strong>Attempts</strong>One. After submission your answers are locked. You may reopen your results to download the exam file.</div>
+      <div class="info-pill"><strong>Your score</strong>Shown as soon as you submit, and saved in your exam file. Grades are final once posted on Blackboard.</div>
+    </div>
+
+    <div class="rules">
+      <h3>⚠ Exam Rules — READ CAREFULLY</h3>
+      <p style="font-size:14px; margin-bottom:8px;"><strong>During the exam you may not do anything else on this computer.</strong> The exam records the following:</p>
+      <ul>
+        <li><strong>Safe Exam Browser is required.</strong> Open the exam with the <code>FIN4329_MT2_Makeup_Exam.seb</code> file from Blackboard. It locks the computer to this exam: no other apps, tabs, websites, screenshots, or second monitors until you finish.</li>
+        <li><strong>Access is restricted.</strong> Enter your <code>@miners.utep.edu</code> email and the access code your proctor gives you at your appointment.</li>
+        <li><strong>Fullscreen is required.</strong> The exam enters fullscreen when you begin. Leaving fullscreen (Esc, Alt-Tab, Windows key) is logged.</li>
+        <li><strong>Tab and app switching is logged.</strong> Switching tabs, minimizing, or clicking into another program or another monitor is recorded with a timestamp and how long you were away.</li>
+        <li><strong>Moving the mouse off the exam screen is logged.</strong> Keep your pointer on the exam window. Resizing the window or using split-screen is also logged.</li>
+        <li><strong>Second monitors are detected and logged.</strong> Disconnect or turn off any extra display before you begin.</li>
+        <li><strong>Right-click, copy, paste, and printing are disabled.</strong> Blocked shortcuts (Ctrl+C, Ctrl+V, Ctrl+P, F12, etc.) are logged.</li>
+        <li><strong>Use only the built-in calculator and spreadsheet.</strong> Click 🧮 Calculator or 📊 Spreadsheet at the top-right. The spreadsheet works like a small Excel sheet (for example <code>=B2*C2/365</code> or <code>=SUM(B2:B5)</code>) and keeps your work if the page reloads. Do not open Excel or another calculator — that would be logged as switching away.</li>
+        <li><strong>Questions are forward-only.</strong> Choose an answer and click <em>Lock Answer &amp; Next</em>. You cannot return to a locked question.</li>
+        <li><strong>Your answers are saved as you go in THIS browser.</strong> If the browser closes, reopen the same link in the same browser and enter the same name, email, and code. Your timer keeps running while you are away.</li>
+        <li><strong>When time runs out, the exam submits automatically</strong> with the answers you have chosen. Unanswered questions score zero.</li>
+        <li><strong>You MUST download your results file and upload it to Blackboard.</strong> After submitting, click <b>Download My Exam File</b> and upload it to the "Midterm 2 Exam File" assignment on Blackboard before you leave the room. Do not open or edit the file — edited files are detected.</li>
+      </ul>
+    </div>
+
+    <div class="form-row">
+      <label for="studentName">Your full name</label>
+      <input type="text" id="studentName" placeholder="First and last name" autocomplete="name">
+    </div>
+    <div class="form-row">
+      <label for="studentEmail">Your UTEP email (@miners.utep.edu)</label>
+      <input type="email" id="studentEmail" placeholder="you@miners.utep.edu" autocomplete="email">
+    </div>
+    <div class="form-row">
+      <label for="accessPassword">Access code (given by your proctor at your appointment)</label>
+      <input type="text" id="accessPassword" placeholder="Enter the access code to unlock the exam" autocomplete="off">
+    </div>
+
+    <div class="form-row hidden" id="proctorLinkRow" style="margin-top:-6px;">
+      <button type="button" id="proctorLink" style="background:none;border:none;box-shadow:none;padding:0;min-width:0;color:var(--muted);font-size:12px;text-decoration:underline;cursor:pointer;">Proctor</button>
+    </div>
+    <div class="form-row hidden" id="overrideRow">
+      <label for="overrideCode">Proctor override code (entered by the proctor only)</label>
+      <input type="text" id="overrideCode" placeholder="Proctor passcode: dry run, late start, or no Safe Exam Browser" autocomplete="off">
+    </div>
+    <div id="sebStatus" class="info-pill" style="margin:10px 0;"></div>
+
+    <div class="agree-row">
+      <label>
+        <input type="checkbox" id="agreeBox">
+        <span>I understand the exam rules above. I agree that tab switching, leaving fullscreen, moving off the exam screen, and other events will be recorded in my exam file and reviewed by my instructor. I will take this exam on my own, using only authorized notes and the built-in calculator.</span>
+      </label>
+    </div>
+
+    <button id="startBtn" style="margin-top:14px;" disabled>Begin Exam →</button>
+    <p class="muted" style="margin-top:10px;">Use one browser on one device for the whole exam.</p>
+  </div>
+
+  <!-- ============ EXAM ============ -->
+  <div id="quiz" class="hidden">
+    <div class="card">
+      <h2>Midterm Exam 2 Makeup</h2>
+      <p class="muted">Answer all 25 questions. Questions lock when you move forward.</p>
+      <div id="violationsBox" class="violations hidden"></div>
+    </div>
+    <form id="quizForm"></form>
+    <div class="card" style="text-align:center;">
+      <button type="button" id="submitBtn">Submit Exam</button>
+      <p class="muted" style="margin-top:10px;">You can submit only once.</p>
+    </div>
+  </div>
+
+  <!-- ============ SUBMITTED ============ -->
+  <div id="results" class="hidden">
+    <div class="card submitted-box" id="submittedBox"></div>
+    <div class="card" id="nextStepBlock"></div>
+  </div>
+
+</div>
+
+<script>
+// =================== CONFIG ===================
+// All times are Mountain Time. The proctor schedules the appointment. There is no fixed calendar closing time.
+const EXAM_OPEN_ISO       = null;
+const LAST_START_ISO      = null;
+const EXAM_END_ISO        = null;
+const DURATION_MINUTES    = 90;  // personal limit in minutes
+const GRACE_MINUTES       = 0;  // extra minutes after the personal limit before auto-submit
+const QUIZ_KILL_ISO       = null;
+
+const INSTRUCTOR_EMAILS = ["pvatsa@utep.edu"]; // may open any time before the kill date (testing)
+// Approved accommodations: email -> total minutes. These students may start outside the
+// normal window and are not cut off at the hard stop. Example: "student@miners.utep.edu": 120
+const ACCOMMODATIONS = {
+};
+
+const STORAGE_PREFIX = "fin4329_mt2mk_fa26_";
+const EMAIL_DOMAINS_ALLOWED = ["@miners.utep.edu", "@utep.edu"];
+
+// Safe Exam Browser lockdown. Outside SEB the exam starts only with the proctor override code.
+const REQUIRE_SEB = true;
+const PROCTOR_OVERRIDE_HASH = "109d14c3172ededbbcd92c6009990351795aeb2c8b65cbc78d48e0765aefc8fc";       // SHA-256 of "mt2mk|" + override code
+const SEB_QUIT_URL = "https://vatsaprithu.github.io/fin4329-midterm2-fall2026/makeup-finished.html";                  // navigating here closes SEB
+const IN_SEB = /\bSEB\b|SafeExamBrowser/i.test(navigator.userAgent) || typeof window.SafeExamBrowser !== "undefined";
+
+// =================== ENCRYPTED QUESTIONS (AES-256-GCM, PBKDF2-SHA256) ===================
+// The access code is never stored in this file. The questions and scoring data
+// are encrypted with it. The instructor re-grades every downloaded exam file offline.
+const ENCRYPTED_QUESTIONS = "9mltesHsaPcR9YI0aFlofniU75Je5h4BrxMRA0jug7o6mOMTpYLa+AoWZvm7dMhoBOzQEnv/B7Qhio1NmM2HEL1wDny5GLWD9TvFSBw7s/hP94ePknnFcLeg26U2VDsPVe/A2lOWIsoboqnk+9WWphkvBq8CvgdKVv9KweQfaJDG9leed0tgDYwKPzzjpqZ//eyMWidjxG+6gEKbBY+eqMtQ05cqHk8BlF1CCVGUezMClcVWRvjvNcJx9EuF+qzKEjczh4k1TmRrxcsZs0ORFvWQl315rTMEuL2pDHTquKwbg1cXA3K03Z3dPJgPUoJJ1rVz0/6ZUi8k+3PJzrFVBAHWFg+iLYtD6Ew649FLIutTRvMXBzrgvUyYaB8sP3BS+0yxUMzauO3p5otZNrObHGIUkiTGkooFge4ugw9WnLG1qhblfrWiCb39P9Wf9TEasZFO7u0Gz3VSstUP+XLL0W4NfHxo2D2jctP7+mh21ope7dZOxND7a6KbN4VN+Jvzx5UzJLribXCRwc6+mhC8zG91WKvGsSQgQ5J6JqgGk6zo4ZGOnVEIdxm86F+0lnaGawg20F8D58hKeZWsA/uTBmd7OVdERnfJrY+qGfvY57lMq607f6WdYVggaPsoQNMSKhuU72Rv6mLBgQloecx3zG7mCUN+y13f46nHyWqoFTKw5sKOR2VFD5OMO3E27+sqxXmiwhuyAeIFHFYPNvR/8uq06bxaPTz5manQum6zVBygJk+ylzBzQtcZaXq9wLcKo24i4lqpLivdtnkAMDm1XX40BcSQyAlr3VK8Z8YLXVPiFcNucdnlKIVBZI/KdYbn3/9m5bkRAvmUptsN7IUtToBchMb2m9Mg/TkfmxGV0/R5n8Zwvq3/zt648gV5wGF7/SMx6yV8PpePTwgVZIUcCMdMEckXPCEDWeKP6WguWAD+/mNtq4getRSFyoBFbnsu2RLcKUwS0yNoicPUfqUoGIrgMrYeUt5zrhiLGpXtSjRcSRBd3VwSEtk6optHjXy4eucbI0VQ8X/C1n3AeNAko6xe1y9zE+0Bd/lQvP33JrP5gdoYyy2mL7HInD6GtPpUhhsp9ThxMu4xF7+TvK8CuSwiJlwInNrpoZ872huAmTXpagDzkVh1A5w9TqBkJjfHJDAr6yMGNP977tXCKgtssKl5KGLWBMesog+XpaOYzPb1uOnkXuS1ydoer4QDONTzRM6AoE586jSGmpdLlPkG9ifTDKMrE7UKQMJnLU1Xwt0u9ZW1HBOJZgrGEkke5/+aMEaFfL8aG6Zjq4R9t+qeDj3GOQqpCCIfScfyIg44AYEiS3Wtd7Bcxl5SQJ8cQIR0rwk8CbFn/xHwfOYljRvd0gpJKcHIZFTOd9b60xpe7ocIIPB0VJQdlQiGkfUDwQEBq8CuJ8iv7Lb7MwP2r3QandVFZuPzthFtY62AiFtGtFHyqxxfxg4bvoxsDHQKe1pSmkQzXFOVCTW4iVsrQzcYrf65GWVbZD9rvJAXHIWI5Rnl/rS9rZ66lF+Yu+TNzP73wlxT7fO5uscNQ8AElMVUH7fzC2jtdnL/QSrvUy9zUZP+4nK8kLZEHUn+GmNX3jKghOqZgm/qrrsLHgoOB+o5wQNxssk9oNN/IMIXHsza6L+q+htxHlioNJHT+VAHB1N6Afnh0vNW8/shPKfUIp5ZP/KYtZHtMeoIhiXJzqxom57L/fXNCDZrVMoJFICc3VHz5+0cqZLIh9kR0IfV8GORpU4vnkwFjgSjlBwC19nUUyaI37KR9+lVBRDS7Dsl8YauZr/QoL5KKz1F8e1pQq9aCr8Npos48FleQzB+TIPcINw0BCTsGmwyTNPh0sWYS/+YiX7Ep6zkFWisy2RGoqoVpToONGpc4b2tWtVMi8t35ujln4S/X1h+VUeyv88qDgEfr7icr/jG2VkMduwknFkY+NvoLbMFqtxpfn/FD2+tKc72sML99I7RfhquUpanaJs1O7yIUwnJqgtpA0UzPgfe/aCxRDKzpqBZaf+f9mmrzHg0937VBZEYiX3XFHjhkSXeuZma4ilcSYguzwWVlEIB5xqcoul2hSobnuRhGQ9mbP7uXUvkk3sW0xusD74f9+r8y4oV1OF6/GF/en2NgtBRkDGt4nGU3zZ6wyQTv6CT+d8wv9uNQozAEgPDQh/X/G6axzwIJtkXi/INp1d3V/TaDSVjxJY7t3UjLSJzz8AV+LGGI/oyaHwLLQFnCQunw0R23Wp/h2SrTek0bHngAeFNJDSiOEqzIGQSVTDmPLa837JQoJ/L7DnqA2L/yZ50w4EnjUjmOiFS4mNfwzMzXSUaOEtcITgAEnIy9FbwrmXQyN+UiGIvykfSoOgONOl/iuk7Dv6myBZXMfPg9UFZ2h6N/3Q3of02yeZ3RppA+y55OrJGYuhycl9uWGDDkDkSNkp/m2ZnIOCWAmbYui3E2T7iRdHQ/RucWfHjrt+apy8nHoq0l/XJgMxy9BjT1AeyuzcpOLlOF5tzVQPzu7Civ8oiD4CX+T8wVPam2Ub89es3WfWvhIS0xZAqXXFE3z7nSfFB9TXLkz2RanSi7JcdVZOIPi+63gBwFshlDgjLkzQSK/bA+6SOWp/iVOlygVQ5IEGwcw0elk/bL33FRpYHglbvvwRYTsX0WliD1fA1Fdx+dWjqVVFuGH4kOH1oZxudzYnX16pELulIi3IIq50dQEf1VFIMoC2zC5aAaXZhrLNwCxgif5RxZIpNSmkyGG2U7CIZCQyOgoP6uQB1I0oKZeb8ygc/oJjK1U0IqWF1D85TSJfU4umttGGuYE6JSlBVw7DgHsKsNU2+Ogg0kjIIyfIHUSP1HDSn1xIsrjLzurnubQwlGLbIl4V+IDYfoLbJkJjMoF2ZRQArxmfN4KaC0MjXwWc0fSrwWZrqvh/ivOmXf7Kb8ZIyAlZggS/84bpMLIuJyavTXV+meIHESEVVg5MOxdrNrFEG06rFf550dY6uvKO5ordon5jjrw6PVAq53p2loJ0eC0xnvM25aEUyxYaLJ1BvVovDQRmP0DiKCBYUhh+jAAWxHzqNBVWG2hVBrnODoTia+nXT6STJoCxbQ74gVggBIczPRpoEgsXBEefgXFDh0cbTPXW+6pJvCWKVZUI3y5Z6EinfOKXVukI/uDMX1f+zd6HRuBg8mEU6KNg3C4AAhR/BsGYoJO5EJUQW2pbueS9wjyyD+1/ryEJh9WIHEmessYkV6pzUbYUKe0azaVxRWJb5/GOYuMAIVh5lTtSQXe9vpSNVO3kWubV0fibN1xwhxKt/wujy/7P56184hJcMfGiKJKQv69UPs7WN0/Gl1QgMswYewaZ1sphEq/4OgwllX614r7xRnJu0mO48paTiCClYCGJyTmUPS7sCcSBxlbCumAZKdr5dVO7MZ+3gdtedZtx7Zll3kqAKVHs614Sj5hrlkCWNveRPW7EIhGij80kOXZCCVtpkgLTezk/p5fWYVADPIj3LhfG16eUAzvqdB+U6wKhw2LWKwdKlcbGsfvA5Kby2PkcdjbTABgm72X/GW4as9zzsS1GvRusd7/WkATy9foV1ErdtnV6vi/p8wGKMj5ywYiQWA6WOTeG/65hqhxxP/5zRPH0E7nQQO5Pv/vVdC5P/oXeBL0zZicNlX/84DqkahiNoqxUkCKNW7F1kyN3RXnGybzDyYOhJpPM92nvhbd0yc+JpJJHAXgIKxUTU9ozNfiBtVYfZfBJJjZYAWM0DHZc8cuajqANTZH4x9AOtsrc91qA2+YwlKJ9FQ6wdnzrHUr3bA8EB06Gsi5aoJtj5bSJs/bs2J7e74+05vNZztRqCqxtW603UaLR+oZgfPf/4xOKpRZolFrvZH5u9HSYfngz9dT9vC+DW8UfCnbx5Z5XiiQKdXaIBEb799IUDiLgYikDnBL4uJxV/dZJ2QekfEazaWy3CdpLwWHxCavQtCrp6Ut0kHjTHffOZTq0FE7+Fx4an14ZpGBrvATJcUAoKyzf8BldjBCJrqUwoo/TnQI33seXCOZ7ItsKrMj2QC+PLd0IQ+HDnldtXmhnVWiAUWk5xl5EG5fQsjAaaOBUM24lhXX/7jKABsaNENVkUN6iL3qzItAdlj2K1H4CpygBYczmFfGEqRhurEjfidTi59LyRN05qwuI9Qg0aSTIlfgK457+s4mP2oOGaVgG0cQNUWjfjWhfCztHqUKTC3BqC9FW7fDyBv7y0PCvmAgKVAQBDw1RxgIs1buJVH56kwIjWMn+6EowHxKoKdb9jwAkqs+82TQDGGYZTKn2228FaYGZQt9Qgqr8Qbp7EcIYiRLMOPCsKq6LH7nsraLXzE+I+d74+59xlqVl3QH6u3E6Vs2YCWEoYUJjUWizuNPJCKM8kmhgWBPTqO2mMXfAn0DR3zxhlXcLFq7GaM1iPFeSQA3cudnliIy7iztlYlAivpxl0s3j92rZQ33NJOfqtoAC2irCz4aYGAPXghqAkx1rhUiIHKNN/T03TexxDwqmf62j1Tx4XID1qeN6+Mh1B9kYWyl/zaJBfJNvYXe4UpPlOsk6qFg6z1vF4ZMn9oECcFxNXiayuOWeXsTbAWH2dxm7SQjFR4nbZffeK5Z4BBXA3QpLtIgpzuYbowj3dDsJrs0pj6qWsPfM2LVnsJqTJFMT1LFibFBKrkDkQHFnJTs3pwIIgrYDgdT0uIkL3/928o3UEdLCs8FCjaDIujAboTPiZklbfdVb5qw/e5aO1LeigbMTDpkT/EwcO7qQg+3AxaA9N5UR5FsQlzYSVeWC4YEjZmH+PySubFpEhy+5Y/sokgbBWU/FAk3sa95mEZSTPCe4sMcANqsBLVEHtGwRE5tKJipBnrGt+ymbxrAV6RxL6rNGIeARygh8aJTSnm3Rvo7VHPAa8DffzRj9VMXvjuQIIgNrVj8iibbnd96WsmvgmefbqqDNbVmZaoYKdnWyojCsrA2GM3EFqfBGrxb33mXyU7vkkwOG/buj6YL+F5t+PMP0DfliGEwPQyFq9Xh1Sx6a5wq89Bkp4kjwsPsEwlX1HM+rFAPvmMU5xOCq31PvF/pnwzJC8Whg+3NRJFSt4Zf6VNleCKfOR0jBW6zw2y7hoNL7CvwugceZjWnHHURnlDhdw/2SyixeZtl9/InBjmW62+N1FZn995PdCsZY1fBe5aECdICleVQizQK1u0Zw1mS+luqtcS5ftmv1NvgcovoZevTwD8MnQVE5YawvVK6/Tpkut9zFl5DFSnkBUMW05qJAdM3nvH+v/4Is5TtDJg8NpRPSPu576CjRKgJmlu09GRuZsa16OJXpQyTsqhr6piRk0P/kp5nzwKeTYxHiDzqdK2cXT9tEfca5OKZwQCDD81eGmOm7fau3SiKkSRMgD58m+fd8JX51+giUJ4/46ylcPhKPfUP4+MlFTkdiZnQeUjilYyz696pT/oFzVlSB/XeItiXSfdOzINGNmrRu1hjzmPbe09WZ7Qu6LBo9znMSycQYZI1FUk1s3HiXVr17uPNwanzUfyVOrOD7cmLSZsLqQtUgRQLbZir+eJajjcvruJkWYACl9ZyHIuyqkvNS+KEgWjF90g+8141/Ol1pcnFKSKw8MkpDuzVxay+KvSVoxtot/eYs2zFHCvfdWm5QlI3uPpCOGr/BbmCInWX4W5MnpQFJ0gF49p24ojX69aL6WlLnaxrT/0kvEjo9Bifz1NnYjViNNiOrF/57M1RbvHzIwJkRX8D7tHhXdxR8CvsjKV4EHRojLSsMFEKC1DnyXRIHOU/9vkk0mJMftjvOuBhs+EkcsnMMwnD89ZmPeuY5OujHmn3fb4T0oqIQmIHPhYYHeAYFikQHsayKQGz0nE3NNCUldgjU+W8U3t0QIabwFm2OA+mJ9iWIWZ8kJGLdiRv/MRzQMjIhvWuVyy95iP9HUuYzBn9JzdHhFpGcQf+g8/BXYrqfgGBtwINaUIzXcqx9hqPsQe0g1KPZ2D+ZVxNO6Pch4xu+G3fOCF5T13xVO2ZP+RSEJCrbt1X7z5C9gy14ab23rWcfX0avFMdjXROJ6iIF40hd6VNzQ6eqaZ583TLvrHGKRRbSIItrCKBEsfuSmxx2qrf7r/AoAb23XBGf3WxkpfCpKbRaadXynmevEMd8WowyJCJDGGh37R3V+hilOHPaM989vqb/nev44AKV/mbqPZE53zgrRlInt341/AUjyqdio7NuEH/eM2ymPDT9onal4fGbMUVfubOR/e7K2hYwW0mbqBhQwKositMZ6KQNUsHt7/N5UDtxYGtQUFQ3IeX9FIxNaOELEbJ9VscNHMGtGi1tU9JcNC9Tow5rrb5ChZ0K/fe+8zCTAOFWiS7XtVxLCVLl6nUUZMeKHn89LD4eUX1icbLEbzhFWpE7a5pNV6jCFSBcPjojVb4fBdJc99VPZIsZjKbJjqNuEutVRJaMy/7bQMxcxOzYEGZtshTcNYKVz8EF/HdFvwLqtd+YntIT+Twv51/sVbyWrrUx40LRp0QSu/+MkTgsO6KkGEGdBkIJfbvVgo4xr5gMezj4a5/uTrZxuXGOb2YiOnFsFCQ9jloFLHff7m+k6TsGhClckwlUh7yUt1NPq0R2WSfLB6FD/bWMU9FHo/mjkZsBbF3vu4QHQmCWJSU+ARL+/p+MdJk/NrPwqFufIDFaOaqZFokkJKYRIy63BSs4pChOHgzKzRAuyc08CTnPSk/3fvHtUEZdhbgIrYUJDofByCaSVMxeFHkMso5HyE8J286eLscxg1l3a7bIUQj/8AuHnak5Lagefqil/2XEmGxyO1mjOuP4mQKy+nRerXfsozQHOY7ZBwmfL/dnWOY+vagvUkH84gog9rME/v/PVlJyEDduwd3NNEh97jZvxLM64P1zqLv9p0+7iadxk3CDHvrzCy227c2H/fFazofBJijQ1vk6SdhKLtb4N1ssYoU2eBSpKCEFJuv7PNknyAUzTf29kEk+OQUnIgZZDhvFc1xHLx5pXfn+KsnkSZw+fWyeb1Rapw7XtTcmkmmldmcSjmF2E1dazysCRg1Ja+1+7iB+XrbPfQzPNPtCYj3lK7kTBBJCueOsj2Cbl+lpB88Ut+1uucOnquYSM+ZBcqG2W/pQh1ZdflW3UC8Pvygt2026tS+3iCH4CajPN+c40UtGMztG5n2Hg6DQ9WN3rDmqaJ0OdJeDOKYUglbyyAk/ZxU/qd8OA3Dx8COdW7AdM/nciF6QHAvAD1EC5D66ZOydlgxAP3Ix/CS9T1sg02RT94jsiFYRF6hkFBy8/xknyQhTVgh2qJ+/bln4Ag+0gW2h9tbkP37rvGNX+Lw9pZ39IpvynWtgK6b/Wwkzn/yCcd6jOGJfUBppPXJr8hx42I000M4aV53qWAiAiwPO9dzZEKvFgY57DgqPWYOSDrCITP+xoXx+gknll71NPmShycXs1XJmvKTfbXF2yLmt7p4obXjG3VP2u/JCvAnIfWPJIfusob4jLqpRoT0aK8Gg79fAkm8J8o6Jfs4m3lT9+TU1k/AnRxvExAUAVeJLq081iG2XvIibXTVaPAQPOBCGSI2lBLLbFv92tuYFnktJnJJcMGEyKqmg8Jl/dXLpOT2ahCG0sjFa6CQg3MGkIFWu5adNVn3fx3qwO9OuNoa6pzxLbABky1Ycxze7qxk3DUteUGUOiY2vNYQE4U2d4KvKrAzt1dbUuKK52chdIvqVpQlvinLZJM8azp0fVzFfA0H0k+SJwWxa0aLlQV9I3iaIjIy4yDybqIsucZ1k3gXGuejm40katQ2PXGptFgWiUKaAv6Rrw4fJKI2qZStWTQ7si9vnVqmXXZPRNy7i/KsyztpllOGGKV5UsiCGP6xSJcnPWHJmHeDd0s403qKBzLEG9MtYT42KcDzb/ovRG+rpSxJOqIGXV9gPk067A0FKLwnGE6dFwN+8I3iey/An6JMvMG+DnMnKXMf3Ln8oRwViMjhXotvBG3zIwtQ9dYjjZqYPoc6+lu53KS8C658g3GbNmEWi+EOuBjs8xP1z/rhV1julRHPBixZgw7P1yX90jOyKUXbMdKBIbfH1/ZCyR1qkBPuwXzSqS7XP6R4aqIwtkNq95imCRNNOs9mYy0YHyS2TJTHdw66NAPx/yEl3dIHRBhLPVijuu4wxsr0D5jun4iICP9c0ENyTLWZfHJYI9SklBzXnCYWXS/oyfJoS5bFtfjIa4RslyERNdj+HAVOaeGVYYKWOoHfG2P2rgeKCuR/EN1iaoB754ZDRdue6472TGyL0D8vvrF71ncCeQarrCTP9fU8oE0oxQDpBzMad7RqpmMdP4rG7HnGqWx+X7kFmW4MLChCaxs2okdi0TJw+duIGcQ2Y2/8ZX+yfGDNjW6wztm9XW+N+tf37wGi0YMNbdpJh6xonD0y8aesxDjHzu9rgOEt0xekpLgDQr7/wQAINC4UProrcVhr8c1RIgfutw+/X+XeT71mHyIdyKDJvO+CBaMjTIri+QOtB/ABM9ftvN9LKxWhsLzSKOrVUTGkmFuB1kp5EZCgM15yHUwHyTLOm0SKyHELWR5RCjMPukPtiXMUJNqabeJi6BXLregdFA7e+pXzL1XyJb28dIU4pQGMJIMMrLW5yzIhYr5V6W8vy6raPzEmgGZHbjzwywzL8zCAv87bTPtiOc1E2KoLT95usTqqRmv3Om2cfFvNtHiBA4GMkNgvDLXihPs8+gi0iYj9XhA6j5jQkg3enD8HAQPytPmN+ThLXxT8JL8hqGe5nBp+7KNAKUo0/wD9XnGnIw0m37xhD9kWAy6YAztk7TS3gYUDfoe9vqiqkFAgbWCDpf+IVeiYkQMZ9o9hFBZl3xImRvDnE/D8zIlvYzC8GCgMrT1e44qExio66GyWVRtJUWH04hHqYXqVzNt/oxzQC+wP/PSmLZp+uOLjpgflNPaW1pA8SJ1sOWIHwHF/Yat0inO09Qs8UzhF/MaRxYnYIHPpX3Qbflw5KIcMBZHL1IwKZt9rq2nq+CxjMVttHTlBQhzITFUdPvdNPGMtts5wOduR7RmWdgh/TWd0UJk6aIlLkgGyGWq/wtixtOa7s6OvQ86XFBejqVFInVmknMnodyBuYlc9N9PpR6dgyTG0WyQYrFz8oasbMzMPi648ubHu7r5D6mzJVDKwOOWT+kzBzvaNv5y6tYvvdX9kNolL3kHUbrrZTNsFexKZdTzmF8ncSFCn6v3fz1HCSwPOTmVcB57Jk+xoAvbOkQnTIVgSNAk7sWJakmHYKPRFZ6iG6Bvp+TDFM1Nv0Y3t4u/SZnIQLgwRckUQNdo/6Rlpz5L6QYJe3ZWSEeYZidgfiv0irxrGxDYAotTla2bJ53k00Yz0ChqT1dFacwqXWJwdvwv2o/Wz3cW0qs5I9fdoSajH/gIBnFWgUpVWjqj8GFzk7Tbovj0FKhwA+oVM46XjmKjL5TCxYQAkidBFeZId1E2PFNONjYC/NJPdZu2U73aSV9AtXI+N4spY+LzUh9TfDjOgS2pK7+NIQGmfL/Q0JDgvXkIzbDDlqhPvQajjCDenu+gbYrvCLG/j5FCde4CFibN0Itlx3S0izQJW9hvIobDZFW27QO3jZjnDjF/f7klRTYysIXyA6om05w164LxLz6CTYlKoBpt2VMvT0cAkzCP0FZgaDdzz0XmtNLK4Fzlj9MM8Uj6K7sL3RqZYEwQKrfqLofyc2gUr2b3dzkDhtKFe25f+E3OloYvL6q86a4aFGbklZYr2TnpPQUoh85Y98FG8rA211n5DRs7VN1qx46b/kglSPby09cDxpjr2uCVKVSTQinPlR2ee3NYEWn1d3jgllP7DJneiSZ3UEEOfQOd8QmQ/7X4bdKFTpKLaWfVyq8tIEh5Wzx1AGKc/n2CDFJaTBuoXRevaSa7lQc6S03SZ0hqPHlh22ZZ4hUqnVpZAeiCQUfA3baMFkySryJeGeR2YnDQIuRHqTM4wFINW2UZ66I7Yo4u08if+de62yweFB9V6a1F+jpQGY0Msq+6xfBL6+XsWRaUKNcDthdutlYgzTS+bNNmYQJcSQC2dlJJfCYPUR2qYzAohNBhbwf1hrG2A/2iIzCErsN2E4FcHeS0naxcjTNWe3OqzPU+PEsDQAzVyzYqjHrhQq0rM6+Lcl6l9fN+YoELo58kN8ghpHpeXCpTMVL4K7g4FVmWXqISa78PameufCT6nTHo3o0ZIXW6drCwT1aVzEat1QnLdnhUdDneTQS3roPzQ3tXc4RV3n0+EqsfTd39tHasZM9m3IBc1eFeCz67h2qzNVgmg86i0U9GHlFtgCzQ2hB1BAONdmQXz4RNNpRha15mSrDE/kU6WPfAmApJYDqT6mfAmpTgiU1/FynmAEhsBrl8QYtLfMWkZyyEaWrAUWjfRhhOVDl5QzvcmLuc/k9b6rn2JA3jLZZhJ2iemlkeM1Lp5s0UYclxVrfRB0P4j0+plYWks8W4cHuLuHG0PZrbyL2H9tR4J/Z6lIdC0EClcBtQMFvLfo+5jrs94y3dysSm+bmtCQnSQqLTTtpIo6QIqAcqWveQw6P/jFdLqx5kTIx2aZ4s7Z5Sph/WlBYggjOeI6FqH+wKIXw9dCcHAm7ax+xySsrXuyWJDYvF+RZ8Z2uuEheamr658oMwgPPNy3a9yZHYn+7wen6xLN9QXSlnhglpPQVVPkXsKiOEFjf8vTA67O3w6zLqpFr1YP6fJPvxFx13cSEqThFRs9tHgi6Fjcc3Bk5JT8/dcsjwMMPH+k9pHSn82776iG64xAlUPKjh3HrsuULPCFZd5LQ1ynRr5oECIsRivOqr0oAvDForyYNokIcmaJLx53S6Q64/nVClO5yn+YHldV4yHYuSNmI6bocPHRFF3PlMJGZYJzCMdkP2Wqfa3kN9YHmQAsIQ17WZceDbXpDPxQr64yGaSw+glFHZ1W35gVEBfpSmAwS2ToS3LyJf3aDPdftmNJ78cZLmuX1y+ZRBM1r6wa9cuO3FbG8RUND3CYbOnTQGjV5r4LTwf92sppEv3mgfVEFd9LKEwsRSIqjbOaZCJRa4rMRyBkOJRGeXzyEWL3l6C+ipBxeugDrjH0onDWMJIQAW3D67lmUxJviSbb3yve9tuQT9wJTnbwsRSCBPgpWMUKDemONsXXLdaEpJfNAG+9UdY3K9rIae9cXsMxfXgQFmNdimMxDwEigYew9cjGxfjnNZ/kYBPblPyWA3zp7D9Hm0Bgp+1a3jr2ZjAQd6GYqrUkU5PRB7sv6aIox7ErA5PEZ9Sezytn6gq/nlHnTaNCZNyV05Xy+gqI7652R/lTJiCO0zRCsBPQy5SVfDuQVf5LrbPPRc/9g4sw08GPjwK/dV5GwSsECWnVxZv4nkaa9ue9bhY9jU6rtbhmj4fhpdPB5/W+Lwxl9xpgajJ1ViYevDGT9iwJdM8ZJMSINR8NntLgd7vPoLSfRIl5iKCWeJDr5qG55iS3kO8iLVBPKeqq9o/1nIV+z/JD97uF9PVV2za3HaV3bO9wQYuKePG/oELWeO8eflGdGQqSDfdNvQLXVgv481i8CieSnxKTXS6sAbjn0ZRxea7DVWq4jykZHXoIlDsw+wVG+UR721NX9LrK2NbB4zsGhtX5WwqAmr6Cck/trA+cIMWYoVYuyvuJxPJKRldnSm58gCQc/Y7GUw+8tuiRi4icmWiMGXOyI2QgzJuMuxBZvqS6xr+Xh31nAedJ0SxkzzFgJjU6BULMEkMbGtp9lOQOeOLMmgH718TPIho5G3BJgb8m5ws8bDfMb50kf2/uzANs5VR4N21aM+IpYZ7k/kJUIAVfOetOonMsM4/5I50AguosZE2fYliDh6q4265UDBx+0k/oMfzZuspmWco9mET6ygyzogJGXgQc0fvpiKMiL5k37LulzuJWTsiEN+11vxP8Ak5b3Y4/1t1PBkTconIxw0562R9gxIiO/ZdVtZ6o0PvLGfRP73VMF3rsEkW8cI+sBWRfrVGDn8QUWYC561OcvXh8+2qwSm2cWgKjeL9aH3X0Y4X+ivF4uv4i+Ec0VdsxELflFhrfYRw6t49PHn+K6wWTqJ7A1H8j/r39DbdVPnfqx3fjQX4NqI2ZA1Eu84fjXVn7rmk29zVmp/P8VI14xrbZCUio3lChW681H7P8/aOejf9JxYFuKtDqAQOrj3DpDN8cfSUimliqvySLWCzmfSUvrcApCie7LBid6W9bEaLfjEapWfMpR6hwdA91Lj9d/ZI1nqmjGjX0Qvxg5ZkghXxRsQ2T7nOYqgeGMqaDkHavbv6GlTvSPiE9jzXRdmGtl5HEoDgP/M9O/gn8krGPt+3dVEL5Ca06V1LtG3C/hSZhNXO+sg4r8TAPFJFw4YYLjSZaPVOsL/7bpp2WDzszYgenRg7Lj/gnRpejxwQgGTDdMUTXCRlssiB1EeuKcJAAtYJ4w+b4fbaI2kEnKuGGgCnTFZbw5ZYwdZea1nkSFh6Yhhw+KzgkBvinVMtnWjbW1iPNtaXT/8eyFnrndEzccdu2YAkcqMriZEdEuW6rAehEBrpIjyoptSpqLmlNWiaC1xxHD1YcVJCbeQ3BOPbmirXA0DqRrKlZJw0sIZVNYIIyhY0PAY3gmgmqe5CgU1fcRC+TP2O04BfwkyiEfanYOPMv9LPWaA5yXwiuT3tI7MVcYkwrUCtHF6ZlbSeTN7y/xzoq6hqJXfQ20YiAvlJb8aZgQOzoADD+padfTqAoxCCTmat34KX+4KNp/TCQvKmdGn/mC3X6hjF2RRun0SJT8lg2LKOKivRdQM2zhY9fezitGLNUQp/H3d4ItSwNC7Kx9uWrNqsMUCc86JlXIWyVCKpObMPpcwKBp+UQMU7ch33qO1tdTXsNmJ263VLbTwOe9TJUevuMGT7lzxmFEYj3YlcoT2tjUENvCwIT5KXar+b8rmvZJXioHZFWYhcALgYYuwyh/npghuqX6ouBX5VLxdRmTQsq2dMy4pQD9GJ2547HYgmewz1JiTvPgXnHDIH2x94ooM4MGku9NrxWo8r7T6WqdLsDY4ZEmWF1C5Sdx+pNJ+4sjTz1nPbjhn+82BHryOKJDILEEkFV3vqIwd8bwKk1oiR5080zYCtjljN7zP7czCEfT3g5YGvHIr3aWmAxvxN+hh5vH7dKz+NkrxvueBuxl4JrAWsYY3QcnOSJ+Y+XDqZaBbB6BOXAvHuQshTZ9nPpai0ItvkqcgtwcnY+UEDWt1wYhDSDy/HOwtFNwTFr2BMMxgTpphwRrA6+oWUrnTX7w9ciEvscRDWWg5DOt/j0Ypmep9ZDiq4Zg0DO2gYEUW6eCIgt1Lr0q5YD4mEzIopqYFgNXv/GkQYExeJLUJcu95odTLiXURctYiobf1DNRKnHqulXKhSdqqqXKiGyID546oHExcxBKMpWBSHdaRwio8sOzI4JCo94UckWmeXJ1wI3ubUr+hhFMdkl3EMFfTT9gs0RJx2NoB2BGiyTJAu2d0EWmxKj/KifeMBewHzo2Q3OF/lqzAIgZZSWMcOY/TBIdF0THqVeWbrCTcqLjwynQ81UBeIq6zf1Xc7wn61FW7H40IA18SxpYUS4OxaXbNILG6l5fblXMkr4PA0yrYOBrESkj7FTuavw1hJOu2gfkNfD1FSiaoktNyFCuPgw0Wp0UJ8matKzbVoVj0BxH1XuJdV0GlLkbG3HSA1NaoZgHVVD5mtdEIbaqqkYABXAo+BJ3SA1kuCZykyFDWysHhSInNizYOrGLf0W6DY7WCYvnrhBk3eCi8/oineDN6+YuWORrylQcF39r25oxKVEbtIfjyVcM4KeMoUvIbLb+yAzLxI+YPwfdi43e6qFQLEFirS1oPDG3iaciZ4tavX2P9iQC167tXaIR3QssigLH8gGjTGzg8qPXiSPEhARdZYhGzhmXcQ2aBa9MN1yROaJFyIBQtqNDWyPNhTFgJ1yw5AF4umMytLkYNhsa91JBQTpkIr1uJ1k/Rk5pR2Mkp4amw7CHUgL0GRckS1NpZkHmJPpCxOzLZF/Bb53vrLs15O0ePjga3ZmDNdr+dexCnhlaMDgukCEdaz3aUsML29jXbPe5MfXzWJjz41zm71bA4jH13g9kHZPKKxfjqqpVY3lV515I5vsDIsK4GCFrA2PxVjeSgxJz6adWjriNtJyT5ZY8kUEqNazD1xtCsxFdExpP7pc1IsHNP5BVjds2HLMdskvAes+u8JPLbXtQKopqo4VyqwXXdMYeO6SFQZ9LuonBySCElGixv9N9RDALSEqXnzqUU1sGNmOI+sKQ4g2VXnNZGS0Kf5GX+mSJfYlFRd3e6OhrGI/3bALZETAY/MMgN87/zokkPIpTa+F9EUmtxys99vZ6l7ivuqJ7qGr4JWGRxaF7D1nyJCyqjzYXZdCu4wxrGQq7ije7yxF2CsCgEygSzptV/N9C1oV2YHPmRgZUqNZOFx1/IOqo4ULTE7khTyRNd7My1nAaZhVJD3VZwyp7AWVcZBl6GyguvvNcvRrkGD3v2P/+e1R1MPPid7RhWNrmki6dm4iF/lwXAG7cQXK04Pb1W7EFa4vCAKcsylVms4eCJZvdw9RXkkH5q5IKiRW9MDC4uw+gZUdXqMZX0/L8pRZJxXx/0nN/5MePSoQgOmYg0tNN0/dN020efSYzAw4/Z6xPvQhOAJB+XFBKbSkvAVTkAkJ9ZyXV9U/kIE9HmPrmtJa81mISYMlVmVYIWSs8ZmLrqqlakHOPMEYLY55MZWmT8esU9gwS7NysNOpGjm8e7RRQQBV7ZtdxOM251LwXCS7TAWfgyGN/YNUlyrvwIb7T2SyLeZQK4PL7BCnSqbC0lOrRK3SWWBxEubSTYf5UFOl1CwYV/nGs+xfMsDrkvIOrWaX3Tib82Eego7NN5bctqnrQzRm/TO9y74otgYEAvy/v3ZQe0u8AkFBoh+4sefJldJSMsm+7PsbmSZkjv6L3CkzIJobwVkL8iUyT0OYXrioiyl8tT2bIPXoVW0AETGKJwlBZWPcwGCoj1ZIznEkgthEWkv2j3UMBmUnfwpUkzAeRLQPjdIhl4FRB4kt1UcUgLOJbW9yhEvZa0lGzd3E5GNQY3iLktGl6DtmMqG/HKosRhgV6ZJWwyGfn6tyfuOA7c7kOOrScEZbGx6MF+17y2T/qaYTi3mAfXqhUYvDvdxBudTxFRhZnUYXQwMfKQ2nPytQ7/7He0wyCrvnZniCjmLvK5rdc/F8EXa6+KT6Pou1O/NZbfp4XNp9e0CuQ0azzb4vJ93x3/C2FAZLSkLcHa9ZzVuvHUQANb7DsUP6vDAT7Qaj54EtLjv6Jm0lxXEVrKz7cHQuQdkzVSaSZ5vT60jucLnDWZ9FecnZz36/V4744ovQ4c+lp71udaO2EtuRJUpW7E5x20tLpfZJjs255olkHsaC2v9xz/J9krfWY+fnSV/WDQvzwGJg2bDbg2qgTBXfQxKmH3nKtpw4TMYjXp44cfuIecYvdna+uNJXvGbK5up2/It+sjjiQ4TU832dhu3YJPBC/Wptq6qpVvavm93cuOfJJ8pf2/2G97g3SI/FPx0tAXfDsai59MOvk13Whmvt7GmM5rqbop13cW5rnlILm8mXNXd7hdsQughubfA5nTzSTrAOjlmHHeR251ewrzWLrYWarF90lVYHMlctjuWf3htMHbjBJG/8SWMgjBJN5P/BetuvY/FVEs23X/CEePy6KGsufhFvUoKEEVVpEV4pSIRwXj7pkOe4153q1LR0zzivhnjb/GaM8RFT9gf/cwsvB2W7AnOzBRl5nYtLzT2qB88+oXlwd06U1hybAHmz+6hMlfVWevEmvEqXmMuz2LGir16mPtf8T0yJeE705O38gpTcEFW2L3RXb8cGiHBfkFch0EI6cM59i/Om2kzzReeQ2y8PE/JoiMjnDa7T4HT3cWFbCVfgo7PotqARijQy4dSJHpRtMwkw83lyQE3lbpDnX87iRAketjzeW6v+At70j+2jGYVt8mWTcmznVIYKBrKynNkgWNAf2hcSL2/BFebcBjibMpdef8J/d18xGTWM0q3NrsBjeHHTVhXdHcz4ontsZq3WdSYztiL15I59Igp3MO8jMBOzM9eMD8TSqCNyTwW2hsjWZC2vcQCyWYHvgE3ez2ZHx7qIv0RSAo7aztVVWrIxDkzqrIuMCKYpHzHeZZ7GXzXnUEVQvD2Ds8+yMpyS7vW46+6nfiU4eWtTs2sIp7ftK0yW2/UJKzf+AOLCVfEvWoACvluZwPDNFCTpuPOO8t6us1yBLpHQePkdQgo7CVtZF1Qz8adHm8gdvStQGL3v2Q6OtRmlHyYPe7y31XOVQ7yuubtXbIXovg/VxzXM7cEDVU2s6gFbOrDFQehtCkrjhT9v8y7PNrSXfglWMLPwJMizCutAg+U6zS5F9+UHmH7lqTCujROnWg7eaFYwodp1OTtqmGuiibAPGuR22AteQBTjyTVXJgHbMyHOQTBibaNYD6D2FsiAhlbuUEbq9kitW2Ny9qAQ1i/dzpbAg4GZ1csVqpXqWIy2yNE2uutOePZ69ru+0P0Hh/rwT/oC2YlvPkPVsS9DApAOwj8u6/UHHPtrAb72CJJ5QZcMG1VvCIj+5tXXkF6fiPbHpiOGOicgqpa7j+dpnfitfMicN7YghrPZcma1O3NQzIQYPoSXq1qzniv5k8rSgtNTEhmMeqBRHTodUffYjlrQtYU/A5DXzat/ZbCrs3uP+zMxbX+6UMTkYW8WeRg14fCTq8j2+rQJCWNTJs5Av2I1rQHAPTIVXN6xoFyM2EfIy9lOgB9voXnKey42A8f/by+KcKXgKka8zQojICMGYC0d8cC4PhDILAm8m3ytcR0s1NTMYjwdLNdK6PhJRiTxmM4D3OmWC+Nb03/d3nR4qICKnjcu3zPw7rztIu0BmatDRB5no6oa0ECJ7uDvShyLQQ+l9xXFMhbshHmaHUTFLdqBqI9cCsyVqdwpptnGdCHHq+gEm/NS8oXqVVUqXsql0LYy1iUsVgjT/H7cqc7hl+mSmCRLTJPzmguDIF0nJm7gzTNs8iDGTp56F79HruuzEi0GrLcuKLXKHu0FA0TVdB1RGjirslOXh/F2ZUB4CMMOTcUWyMBOIOEQqXeWGZvPSAD0nwZ2bX+ikZJdADr75Or1IkI/OeSz65SFejAHNUiNH48lvvjAiQbwxayII35ZE4Zk64HVscWpZZgq13Rx7qCR2wA1ug6r2yDeaRbSuEMiLiJ16xxcJXdFxOkAcPPd+lmEviFGfs9U+tNHpBDZ0CLCUetJp9fp8HdTJmVzDRBG8rcjIXfULoFh0C5AHiDb0XAexJjCZNwufExF6ZSuJwEtryXQnkbzj+/65IZnqNW1qgCjTYgMKGtc6SkJZEjaAEkaZQbTnbp1eOGX0Dv2dY7u3+OGX9fijxN2Nxm7+b1je2tdixP9vfjQjEiPbX1sO32zR1FDiVsjLID6cL30RIgjhYVBzkF8qZ3YDh2XUV03GwX0YZynceUfbJ/mexHRVtppnZiI93x9Vt4wcQg9HZbxQWsRqsU5BjPpky1Odl/7nl4TeTdB+rLcJtfCz6aPeZrAyIlzJW2TE+0qSpTTNvo95oD+ZR0kE4Hpgql3g55dQ+9+Kt+wClWpL99SgOhGT82UGtWKehOQ47dcpGWGGDfEKwBH2Pdg72VVsmyJsfTU69V+Mkw4YyFQ6KoCXayMuwIzBk/eDHDWlJvPARPNA5voaRvwbZ5qGc1OlysAJGwSjdwUXu2P9/SBuO7QfTgaXjSfwE8PTWpAUlLGkHJMi2ABTMeOnmN2XjJTPms4fE1yg7hj4mzwDbixERiriWQRXKBCWCxhbngTzfo3c9ZZDvtYeppXmlN8fOu1Q6St3sQibMgR3ei2m6n17N9BJ9Wc7kZw1Uyw3FyCYeqWLewMXycuIfRNopoPbM64vbXjK0IHDr6jsfPA9Av6g9vcZ0vP4BwLZeli4r96O2KnUZKdJKrwJK1JruxCRnMlosRV3sTEfk1jhQTAAWs0ZobUmJBakOAVdInsEj21I7KQgByQwdjo5q4erJWsU+zTNIG/IcrjNZKe5Xy7XzotJc2CS+HtsQ3gsleeMtgiLtlevcRd25YII0qmoCovdS8TQhUUpgE0ne7MOMaf0G3FaZc7eBOHlxwtS2dIghOB2EG1w7GoMgFxLex5gyfaNNHRzzOWPgpLAAtKebLOH1SW31qRLqhN2UOzcfZLWF4wJgcrnISNh+npODYFPQeucp2RNPljnbrWOvCnIZU7MvjU6xToy/oesuoG5OVLoLo0nhjrbZ6FSYxay8ap0NctKc1Y4oOKO6KLPBnc4Wmh9oAcct1aAcoxKtnqYRozfyfsSlhBAKFT0u4TnC2GQKJZrKARRXP2hY+AnZL8aX1Fk3SD9hacSQnuINjY2LdY4w97bltlq1r1Qp40Yq6g+Qr6NwDD2y/ROAgBVUuKFZ9lKi0DPWY9YVxcu9MplszPwR5eb+E1zj7nAC2lcroL41fwHudLCQmOptnS5wfKMm+6G5g2kKLeYUPfXCTV/YBYjm+r8VsOQ+mj3lEhddQefscdDral/1S2VLCWeTvBtgAGcdiqzTBJ0YoFgT1MlitQJ+OD3a6fs4Q15azdR16ftHR4yk7w7oX7bmpg9AhD5x11uJJM1AGL+t7qyAAZeSu51XjmBFAAudd3WVl33aDfVw3Lvtd7JHZAxXR49kJlp5EPu0HgLs5nPTcqFXpB/j/3io0Rv3q8BXE5zKuagIpAO0Kz93nbeC6k/CI7y8AObi3NuWEn56df99Cy4cmHbyZoTBibhAJ3uz+BrQYZLsy0wzUsYeyBPZPx82psdw7so7Cmqkq2GBAGDQfjEgrLZyp+6Zjx2Z//X5aIDuCii6z0mVRDrQcAURoNMc0iZ1cHug+I2Fd74/tnbb9FUeZWcG0te19PJUQm8eHEsepYdTsfKMOD9HEouZl7cDaipO/l9CMmwOT0MjjDCEoywOqWnqGRvtd5UflflNZ6FuLHQz5r5CQMfxbIhqGnTVF7PF/gMWoEUep4ZopB289URLw7MN9XZJJyii8n4eBdRv29iKzhPlg+NpbNc6HRnAzV/kwkCEL/woxussL12GnmCwU9hH8dcfNtcNl10m2sFeJscG8ZkiemMr1F9Rfv1nCmMhT1sEoXhugL3Eh0j+ynVfl5pwsJGP+InPipC7QW3CDNViFRAdrYaNXEunupSRXpyXn0rB8FaquGaB8ucgo40QkOgpBkyK7Q9+ECPajOsCPpG7HUuQAHXhhgeTiHMg/rqU66WvPposqWpYCgrcJjWGQQfeVgXLekjg828zwikCj9RKG8wvHynQfsSPGg6M3NJRhs2PKOjgjBS9BC3KDArvGv9nhUuFZL99uUV2z7jtQTespYa1XJ7iC1ZbL0Mb3R7sb3RVuukSGzfY1W/onlM7rS8amcYh4Ld9zAiG2p8Rd/HS8L6WUwRz+Eq6I/RoWTbgyTwcoQbRbPo77jPyt6/FGgexFiZ+3q288sNrPladB9omkI6ENq450wJ29XNt0p+ICO66YEP1GLAqCx5IM9+EHnv8mQolsa7EWuk6wlZAbIobawoxj1ea2FT90NPtZtO1ydGAe7IuQj3QYfnxM1sNIQBoZ3Lv0Cqkha0abx/ZpUG388cu67rqhrerh0qkLjFYB0N0NjtexYpFlQM84uvHSx9c0CSvtgtA583qrsQYeIaTSslpagGoZOjropiQx/KydTBpPJYrHdDrEhYb0p/led/piGfLUUZVafUCZmNygffmzBGxs5irhasNbSC/DRn7EaUziMWXw2Q4V/DlVkHRHw+mLmTMAoFOcsfLyGFMZDqTtlxP587oiZBHSgv49Coia487K3uiyr5xj1L/gqIfq1oO1svbJhom3BbA+Jw+I9j40y0NkTiY42+gxLCNxglFLS2yHxMBjhzodn98TJQJGyc6E7vTDsH7rQAXt95CGSqBZTKHCSjTjZ96MboaALD0qNfvlktSXA9+WTj60Cy5y72c+lcLw2uYPrgsabFkj6eZufloi7ygo4jWzPMXz5wvcogI3QLIpeeJxljUh3W2Zu1PzPK/XCl7gatUQavTJ7RSJLrEidXpRQ4YZa/jiweD3DkE+KfFDUpFscjN05Oo6c+CuTRCJzRu/nWk9ucJzcEw9KBTfWY9Ke81m9O9ki+u/dcPBENban38akWaqM+0Ng5x+PxYUQfFosidDxtLkyivBZL4vcwWNkzszttWin5CzpMqlch3nMpwhMcaDx1XtiVursF3gUyF7rNwE1oZWq+P8ODVO7y3lEKVreoevJ5jnBzhJEB7QlJmO+R2IIC6SAIl+dZK3F6l4PmZ0NGGidNCwHTGCgqsWuCBw+mmwe12lUAHjbX8XkRWU2vLMAtcjGzAIMRj73WNwjNAQt93x/AkOB+Id5u9hk92mOvGNDSIja32QRAdfPGQOZj+1d9A46A9X0Ga2FMqXfhelXHp6HDbAeaTHFNWsZHZBg132QOPwPNrJYjT+upY1J9kY9vyG3iktohUHngkylgAdNGltWo0qwTWV80OmFbAGbi8F5+nMXbGmRns5qu/MOdiQTwJ/mtdTWfhXVKyrPWNgiqSWYuoPi/q1YrkkAzd/kH2PBNh35/tSYUxoZEDL7T9Kzj0Mbp43hY/y+TjVbqsngMdCUeFLV68UaaQoLfNBlZ34jTkG6g4zhf9Cu4WfUrY7azhXcOfn0HO+Ogb3ruZpsJbl5SF77FCf/EjFhRRCNoYJ8CB3EYLOGvAVq4GbRoQlvWU0OaYl4w1VeV7jRH38cB+MgModBp0mD0+/EzddX9Ik7ZRbaiI+FB8lV7L8SPElR+fHpxSuP0I8ZLpFoKRDSh7E6aCPRq9yimlai9ZQfjg7+cdBh2i2V/FwS3/58UngsnFZRX52e0xIv9plz91jlpQbUaNEiG6+CKQZD0E92YFA2xS9kMV/yMuN7b3Oqt2m0zpX8AL1NQezuXmcpf5qTFDlSUafBx+qXrS2+S4Yx4vSkWsiboE9Db6W0NoyeWQhvUtw05inFLbkmCfZyP3MeQAGUHm3YP8wdtcOrLn/o4HEzUg/XUoCO4iwb9hfRYxdjF5ZoFPM0C+FUFuIRs48K2wGGY/O9Ji9g9Q+9YCzl/VG5c14HohfpEoKjcyLKCHW8T/2bkI6dXdDEIgBFd0qF9Hd/AmvgoORjchVg/eP25jBo02fOTB3raDVSQIOamBAOQ2Rt6oKeOJQbkdrrDrdIfVoG18USkWvejYa3gObRKDYNhH3BpnDQ7QLXDSC9vg8jGoJGGDFSyF7j0LLAjkD6nNeEfjWw57D3x800brKU4m1l+QwdbGVtvYdDGvAgzejtdsXeaU9+lRfAl6QWe+C2Jgcnd6BVFwT0xGH0oQMVZhGzLlGmRDjeJxpctXjhzpEwhrKqMi268uTElcx9aY/jXi7Oye33A2/D7UfcipkOxpDQEylfsVrsJ2HowhTjWtJM7b73lZW84w6edAi4DsAG9XbkltjiH5tyYxMPb55Xfh0bAlvSiHGXCd6M96tgFvf1b+uZxpq28X0MUAWjQVphhdW+STCuevksaMsOZeFwqhHhWm3sGPqqEz/MBZY/3QDuY/QOB0z0thm8PiRlbeBvSDUpUeVUgdUpg6Kvtu9k+547AP5xI9MtDcvh1qKU/5DikJTsPc2zlaGDQsJXvCoQDSJ7igKiGRjqrFjn+TLyayrfQ8w+QEL/TpJrRPjjVFIAac0eVG+cpdUfPbf7LFZYeKhW2G/Iyb0teKE6mygGG4/5IP9yVTF38ega06Kv7A4kdQzux6QqIM+X38jkgtID9zTDX8oZXjUS52ygRLYvF4sAgZN28/cT8Anh8NuF3uytzjyRc2Ts6RHMageea6+V01ZCkHO4HYE9HiAfzgrcpZT530GEGCf/1Q7zG8G4ZWrT8mNxjmSn86YE343RCDUdXPM55eMlnVMCAFpys5nNcUDDpgSTD/Vd/JxUagsLJYOMMJgW2WjDh8ag23ObYjxY2eb+yGQn4d8U0eCYSxSw5uHXCcG1e/W4WYqIJgEHEuzDnHYZ5of3OUKUwd8UuNgUywmC+uakU8HKcyLfHndgvpUAcw3ryRGF6YcU/u81SXd1Taszc5wp/0ZeGll7l66omx3rbrk78QeTYIR1RtpHJavwMsHV2Bc5Gmp6i1DYBCZA7otbF8TOB+RdHwJESbe8Oit3rgmUxYQytiECSkLINew2SKp+gp3PpSIx4G0hnj4uUfzOAlVHzSidYdLEwN9VxThxUy0JRxuDsL1gU5mMUxxiTkWmbLnnhQvn1h4NJxccR0dH6rebAmujlWZyKDYV2fSv75qp8pLbHKDgUZQ==";
+const PBKDF2_ITERATIONS = 200000;
+let EXAM = null;       // { questions: [...], integrity: "..." } after decryption
+let QUESTIONS = null;
+
+// =================== STATE ===================
+const A_OPEN = EXAM_OPEN_ISO ? new Date(EXAM_OPEN_ISO) : null;
+const A_LAST = LAST_START_ISO ? new Date(LAST_START_ISO) : null;
+const A_END = EXAM_END_ISO ? new Date(EXAM_END_ISO) : null;
+
+function storageKey(email) {
+  return STORAGE_PREFIX + btoa(unescape(encodeURIComponent(email.toLowerCase()))).replace(/[^a-zA-Z0-9]/g, "");
+}
+function loadState(key) { try { return JSON.parse(localStorage.getItem(key) || "null"); } catch { return null; } }
+function saveState(key, state) { try { localStorage.setItem(key, JSON.stringify(state)); } catch {} }
+
+let currentKey = null;
+let currentState = null;
+
+// =================== SEEDED SHUFFLE (per-student question & choice order) ===================
+function hashSeed(str) {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+  return h;
+}
+function mulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function shuffled(arr, rnd) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+function buildOrder(email) {
+  const rnd = mulberry32(hashSeed("mt2mk|" + email.toLowerCase()));
+  const raw = shuffled(QUESTIONS.map((_, i) => i), rnd);
+  const order = [], placed = new Set();
+  raw.forEach(i => {
+    if (placed.has(i)) return;
+    const g = QUESTIONS[i].group;
+    const members = g ? QUESTIONS.map((q, k) => q.group === g ? k : -1).filter(k => k >= 0) : [i];
+    members.forEach(k => { order.push(k); placed.add(k); });
+  });
+  const choiceOrders = {};
+  QUESTIONS.forEach((q, qi) => {
+    const idx = q.choices.map((_, ci) => ci);
+    choiceOrders[qi] = q.fixedOrder ? idx : shuffled(idx, rnd);
+  });
+  return { order, choiceOrders };
+}
+
+// =================== PROCTORING: event log ===================
+let quizActive = false;
+let events = [];
+
+function logViolation(type, detail) {
+  if (!quizActive) return;
+  const entry = { type, detail: detail || "", at: new Date().toISOString() };
+  events.push(entry);
+  const box = document.getElementById("violationsBox");
+  if (box) {
+    box.classList.remove("hidden");
+    box.innerHTML = `<strong>⚠ Events recorded: ${events.length}</strong> — These are saved in your exam file for your instructor. Stay in fullscreen, keep the mouse on the exam, and do not switch away.`;
+  }
+  if (currentState) { currentState.events = events; saveState(currentKey, currentState); }
+}
+function logInfo(type, detail) {
+  // Environment info: recorded but not counted as a violation on screen
+  const entry = { type, detail: detail || "", at: new Date().toISOString(), info: true };
+  events.push(entry);
+  if (currentState) { currentState.events = events; saveState(currentKey, currentState); }
+}
+
+// Tab hidden / minimized
+let tabHiddenAt = null;
+document.addEventListener("visibilitychange", () => {
+  if (!quizActive) return;
+  if (document.hidden) {
+    tabHiddenAt = Date.now();
+    logViolation("tab_hidden", "Exam tab hidden (switched tab, minimized, or switched app)");
+  } else if (tabHiddenAt) {
+    const sec = Math.round((Date.now() - tabHiddenAt) / 1000);
+    logViolation(sec >= 15 ? "tab_return_long" : "tab_return_short", `Returned after ${sec}s away`);
+    tabHiddenAt = null;
+  }
+});
+
+// Window lost focus (clicked another app or another monitor, even if the tab stays visible)
+let blurAt = null;
+window.addEventListener("blur", () => {
+  if (!quizActive) return;
+  blurAt = Date.now();
+  logViolation("focus_lost", "Exam window lost focus (another app, window, or monitor)");
+});
+window.addEventListener("focus", () => {
+  if (!quizActive || !blurAt) return;
+  const sec = Math.round((Date.now() - blurAt) / 1000);
+  logViolation(sec >= 15 ? "focus_return_long" : "focus_return_short", `Focus returned after ${sec}s`);
+  blurAt = null;
+});
+
+// Mouse pointer left the exam window (e.g., moved to a second screen)
+let pointerOutAt = null;
+document.documentElement.addEventListener("mouseleave", () => {
+  if (!quizActive) return;
+  pointerOutAt = Date.now();
+});
+document.documentElement.addEventListener("mouseenter", () => {
+  if (!quizActive || !pointerOutAt) return;
+  const sec = (Date.now() - pointerOutAt) / 1000;
+  pointerOutAt = null;
+  if (sec >= 2) logViolation("pointer_left_window", `Mouse was off the exam window for ${Math.round(sec)}s`);
+});
+
+// Window resized (split screen / un-maximized)
+let resizeTimer = null;
+window.addEventListener("resize", () => {
+  if (!quizActive) return;
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (!quizActive || document.fullscreenElement) return;
+    const pct = Math.round(100 * window.innerWidth / screen.availWidth);
+    if (pct < 90) logViolation("window_resized", `Window is ${window.innerWidth}×${window.innerHeight} (${pct}% of screen width)`);
+  }, 800);
+});
+
+// Fullscreen exit
+document.addEventListener("fullscreenchange", () => {
+  if (quizActive && !document.fullscreenElement) {
+    logViolation("fullscreen_exit", "Left fullscreen");
+    setTimeout(() => { if (quizActive && !document.fullscreenElement) requestFullscreen(); }, 500);
+  }
+});
+
+// Blocked shortcuts
+document.addEventListener("keydown", (e) => {
+  if (!quizActive) return;
+  const k = (e.key || "").toLowerCase();
+  if ((e.ctrlKey || e.metaKey) && ["c","v","x","p","s","u","a","f"].includes(k)) {
+    e.preventDefault();
+    logViolation("blocked_shortcut", "Ctrl/Cmd+" + k.toUpperCase());
+  }
+  if (k === "f12" || ((e.ctrlKey || e.metaKey) && e.shiftKey && ["i","j","c"].includes(k))) {
+    e.preventDefault(); logViolation("blocked_shortcut", "Developer tools shortcut");
+  }
+  if (k === "printscreen") logViolation("screenshot_key", "PrintScreen pressed");
+});
+document.addEventListener("copy", () => logViolation("copy_attempt", "Copy attempted"));
+document.addEventListener("paste", (e) => { if (e.target && e.target.id && e.target.id.startsWith("calc")) return; logViolation("paste_attempt", "Paste attempted"); });
+window.addEventListener("beforeprint", () => logViolation("print_attempt", "Print attempted"));
+
+function requestFullscreen() {
+  const el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen().catch(()=>{});
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+}
+
+async function recordEnvironment() {
+  const info = {
+    safeExamBrowser: IN_SEB,
+    proctorOverride: !!(currentState && currentState.proctorOverride),
+    screen: `${screen.width}×${screen.height}`,
+    window: `${window.innerWidth}×${window.innerHeight}`,
+    userAgent: navigator.userAgent
+  };
+  if (typeof screen.isExtended === "boolean") info.multipleMonitors = screen.isExtended;
+  logInfo("environment", JSON.stringify(info));
+  if (screen.isExtended === true) logViolation("second_monitor", "More than one display is connected");
+}
+
+window.addEventListener("beforeunload", (e) => {
+  if (quizActive) { e.preventDefault(); e.returnValue = "You are in the middle of the exam."; return e.returnValue; }
+});
+history.pushState(null, "", location.href);
+window.addEventListener("popstate", () => {
+  if (quizActive) {
+    history.pushState(null, "", location.href);
+    logViolation("back_button", "Back button pressed during exam");
+    showNavMsg("You cannot navigate back during the exam.");
+  }
+});
+
+// =================== WINDOW BAR ===================
+function updateDeadlineBar() {
+  const bar = document.getElementById("deadlineBar");
+  bar.textContent = "Scheduled makeup. Obtain the access code from your proctor. Your 90 minutes start when you click Begin.";
+  bar.className = "deadline-ticker";
+}
+
+// =================== RENDER EXAM ===================
+let currentQIdx = 0;
+let order = [];
+let choiceOrders = {};
+
+function renderQuiz() {
+  const form = document.getElementById("quizForm");
+  form.innerHTML = "";
+  currentQIdx = 0;
+
+  order.forEach((qi, displayIdx) => {
+    const q = QUESTIONS[qi];
+    const card = document.createElement("div");
+    card.className = "q-single";
+    card.id = `qcard_${displayIdx}`;
+    const scenarioHtml = q.scenario ? `<div class="scenario-box">${q.scenario}</div>` : "";
+    const choicesHtml = choiceOrders[qi].map((origCi, pos) => `
+      <label><input type="radio" name="q${qi}" value="${origCi}"> ${String.fromCharCode(65 + pos)}. ${q.choices[origCi]}</label>
+    `).join("");
+    card.innerHTML = `
+      <div class="q-layout">
+        <div class="q-left">
+          <div class="q-num">Question ${displayIdx + 1} of ${order.length}</div>
+          ${scenarioHtml}
+          <div class="q-text">${q.q}</div>
+        </div>
+        <div class="q-right">
+          <div style="font-size:13px; font-weight:700; color:var(--brand); margin-bottom:10px;">SELECT YOUR ANSWER:</div>
+          <div class="choices" role="radiogroup" aria-label="Answer for question ${displayIdx + 1}">${choicesHtml}</div>
+        </div>
+      </div>`;
+    form.appendChild(card);
+  });
+
+  const navDiv = document.createElement("div");
+  navDiv.id = "quizNav";
+  navDiv.innerHTML = `
+    <div class="q-dots" id="qDots"></div>
+    <div class="q-nav">
+      <span class="progress" id="qProgress"></span>
+      <button type="button" id="nextBtn" onclick="navigateQ()">Lock Answer & Next →</button>
+    </div>
+    <p id="navMsg" style="color:var(--err); font-weight:600; text-align:center; min-height:1.2em;"></p>`;
+  form.appendChild(navDiv);
+  const dotsEl = document.getElementById("qDots");
+  order.forEach((_, idx) => {
+    const dot = document.createElement("span");
+    dot.className = "dot"; dot.textContent = idx + 1;
+    dotsEl.appendChild(dot);
+  });
+}
+
+function showCurrentQ() {
+  document.querySelectorAll(".q-single").forEach((el, i) => el.classList.toggle("active", i === currentQIdx));
+  document.querySelectorAll("#qDots .dot").forEach((dot, i) => {
+    const qi = order[i];
+    const answered = !!document.querySelector(`input[name="q${qi}"]:checked`);
+    dot.classList.toggle("current", i === currentQIdx);
+    dot.classList.toggle("locked", i < currentQIdx);
+    dot.classList.toggle("answered", answered && i >= currentQIdx);
+  });
+  const isLast = currentQIdx === order.length - 1;
+  document.getElementById("nextBtn").textContent = isLast ? "Submit Exam ✓" : "Lock Answer & Next →";
+  document.getElementById("qProgress").textContent = `${currentQIdx + 1} of ${order.length}`;
+  document.getElementById("submitBtn").parentElement.style.display = isLast ? "" : "none";
+}
+
+function lockQuestion(displayIdx) {
+  const qi = order[displayIdx];
+  document.querySelectorAll(`input[name="q${qi}"]`).forEach(r => { r.disabled = true; });
+}
+
+function showNavMsg(msg) {
+  const el = document.getElementById("navMsg");
+  if (el) { el.textContent = msg; setTimeout(() => { if (el.textContent === msg) el.textContent = ""; }, 5000); }
+}
+
+function navigateQ() {
+  const qi = order[currentQIdx];
+  if (!document.querySelector(`input[name="q${qi}"]:checked`)) {
+    showNavMsg("Select an answer before moving on. Once you move forward, you cannot return to this question.");
+    return;
+  }
+  if (currentQIdx < order.length - 1) {
+    lockQuestion(currentQIdx);
+    currentQIdx++;
+    currentState.position = currentQIdx;
+    saveState(currentKey, currentState);
+    showCurrentQ();
+    window.scrollTo(0, document.getElementById("quiz").offsetTop);
+  } else {
+    document.getElementById("submitBtn").click();
+  }
+}
+
+// =================== AUTO-SAVE & RESUME ===================
+document.getElementById("quizForm").addEventListener("change", (e) => {
+  if (e.target.type !== "radio" || !currentState) return;
+  const qi = parseInt(e.target.name.slice(1), 10);
+  currentState.partial = currentState.partial || {};
+  currentState.partial[qi] = parseInt(e.target.value, 10);
+  saveState(currentKey, currentState);
+  showCurrentQ();
+});
+function restoreAnswers() {
+  const partial = currentState.partial || {};
+  for (const [qi, val] of Object.entries(partial)) {
+    const inp = document.querySelector(`input[name="q${qi}"][value="${val}"]`);
+    if (inp) inp.checked = true;
+  }
+  currentQIdx = Math.min(currentState.position || 0, order.length - 1);
+  for (let i = 0; i < currentQIdx; i++) lockQuestion(i);
+}
+
+// =================== TIMER ===================
+let timerHandle = null;
+function personalEndMs(state) {
+  const acc = ACCOMMODATIONS[state.email];
+  const minutes = acc || DURATION_MINUTES;
+  const own = state.startTime + minutes * 60000;
+  if (!A_END || acc || INSTRUCTOR_EMAILS.includes(state.email)) return own;
+  return Math.min(own, A_END.getTime());
+}
+function startTimer() {
+  const endMs = personalEndMs(currentState);
+  const hardMs = endMs + GRACE_MINUTES * 60000;
+  const bar = document.getElementById("timerBar");
+  function tick() {
+    const now = Date.now();
+    if (now >= hardMs) {
+      clearInterval(timerHandle);
+      bar.textContent = "⛔ Time is up — your exam has been submitted.";
+      bar.className = "visible expired";
+      submitExam(true);
+      return;
+    }
+    if (now >= endMs) {
+      bar.textContent = "⛔ TIME IS UP — click Submit now, then download your exam file and upload it to Blackboard.";
+      bar.className = "visible expired";
+      return;
+    }
+    const rem = endMs - now;
+    const mins = Math.floor(rem / 60000), secs = Math.floor((rem % 60000) / 1000);
+    const mmss = `${mins}:${String(secs).padStart(2, "0")}`;
+    if (rem <= 5 * 60000) { bar.textContent = `⚠ 5-MINUTE WARNING — ${mmss} left. Finish and submit.`; bar.className = "visible warning"; }
+    else { bar.textContent = `⏱ Time remaining: ${mmss}`; bar.className = "visible"; }
+  }
+  tick();
+  timerHandle = setInterval(tick, 1000);
+}
+
+// =================== START ===================
+async function decryptExam(password) {
+  const blob = Uint8Array.from(atob(ENCRYPTED_QUESTIONS), c => c.charCodeAt(0));
+  const salt = blob.slice(0, 16), iv = blob.slice(16, 28), ciphertext = blob.slice(28);
+  const enc = new TextEncoder();
+  const baseKey = await crypto.subtle.importKey("raw", enc.encode(password), { name: "PBKDF2" }, false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt, iterations: PBKDF2_ITERATIONS, hash: "SHA-256" },
+    baseKey, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+  const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, ciphertext);
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+
+document.getElementById("agreeBox").addEventListener("change", (e) => {
+  document.getElementById("startBtn").disabled = !e.target.checked;
+});
+
+document.getElementById("startBtn").addEventListener("click", async () => {
+  const name = document.getElementById("studentName").value.trim();
+  const email = document.getElementById("studentEmail").value.trim().toLowerCase();
+  const pwd = document.getElementById("accessPassword").value.trim();
+  const btn = document.getElementById("startBtn");
+  if (!name) { alert("Please enter your full name."); return; }
+  if (!email || !EMAIL_DOMAINS_ALLOWED.some(d => email.endsWith(d))) {
+    alert("You must use your UTEP email (" + EMAIL_DOMAINS_ALLOWED.join(" or ") + ")."); return;
+  }
+  if (!document.getElementById("agreeBox").checked) { alert("You must agree to the exam rules."); return; }
+
+  const isInstructor = INSTRUCTOR_EMAILS.includes(email);
+  const hasAcc = Object.prototype.hasOwnProperty.call(ACCOMMODATIONS, email);
+  currentKey = storageKey(email);
+  let state = loadState(currentKey);
+
+  // Already submitted: show the submitted screen so the file can be downloaded again
+  if (state && state.submitted) { currentState = state; renderSubmitted(); return; }
+
+  // The proctor passcode (typed by the proctor) skips the SEB check and the time window,
+  // so the proctor can also do a full dry run before exam day.
+  const oc = document.getElementById("overrideCode").value.trim();
+  const overrideOK = !!oc && (await sha256Hex("mt2mk|" + oc)) === PROCTOR_OVERRIDE_HASH;
+  if (oc && !overrideOK) { alert("Incorrect proctor override code."); return; }
+
+  const now = new Date();
+  const dryRun = overrideOK && (A_OPEN && now < A_OPEN);
+  if (!state && !isInstructor && !hasAcc && !overrideOK) {
+    if ((A_OPEN && now < A_OPEN)) { alert(""); return; }
+    if ((A_LAST && now > A_LAST)) { alert(""); return; }
+  }
+
+  let usedOverride = false;
+  if (REQUIRE_SEB && !IN_SEB && !isInstructor && !(state && state.proctorOverride)) {
+    if (!overrideOK) { alert("This exam must be opened in Safe Exam Browser using the .seb file from Blackboard. If that is not possible, ask the proctor."); return; }
+    usedOverride = true;
+  }
+
+  btn.disabled = true; btn.textContent = "Checking access code…";
+  try { EXAM = await decryptExam(pwd); }
+  catch (e) { btn.disabled = false; btn.textContent = "Begin Exam →"; alert("Incorrect access code. Please check with your instructor."); return; }
+  btn.disabled = false; btn.textContent = "Begin Exam →";
+  QUESTIONS = EXAM.questions;
+
+  if (!state) {
+    state = { name, email, exam: "FIN4329 Midterm 2 Make-up Fall 2026", created: now.toISOString(),
+              startTime: Date.now(), partial: {}, position: 0, events: [], submitted: false };
+  }
+  currentState = state;
+  events = state.events || [];
+  if (dryRun && !state.dryRun) {
+    state.dryRun = true;
+    events.push({ type: "proctor_dry_run", detail: "Started before exam day with the proctor passcode (test run)", at: new Date().toISOString() });
+  }
+  if (overrideOK && !dryRun && (A_LAST && now > A_LAST) && !state.lateStart) {
+    state.lateStart = true;
+    events.push({ type: "proctor_late_start", detail: "Started after the last-start time with the proctor passcode", at: new Date().toISOString() });
+  }
+  if (usedOverride) {
+    state.proctorOverride = true;
+    events.push({ type: "proctor_override", detail: "Started outside Safe Exam Browser with the proctor override code", at: new Date().toISOString() });
+  }
+  ({ order, choiceOrders } = buildOrder(email));
+  state.order = order;
+  saveState(currentKey, state);
+  beginExam();
+});
+
+function beginExam() {
+  document.getElementById("landing").classList.add("hidden");
+  document.getElementById("results").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  renderQuiz();
+  restoreAnswers();
+  showCurrentQ();
+  window.scrollTo(0, 0);
+  quizActive = true;
+  if (currentState.started) {
+    currentState.resumedCount = (currentState.resumedCount || 0) + 1;
+    logViolation("resumed", "Exam page was reopened (resume #" + currentState.resumedCount + ")");
+  }
+  currentState.started = true;
+  saveState(currentKey, currentState);
+  requestFullscreen();
+  recordEnvironment();
+  document.getElementById("calcToggle").classList.add("visible");
+  document.getElementById("sheetToggle").classList.add("visible");
+  sheetLoad();
+  document.getElementById("timerBar").classList.add("visible");
+  document.body.classList.add("quiz-active");
+  startTimer();
+}
+
+// =================== SUBMIT ===================
+let submitArmed = false;
+document.getElementById("submitBtn").addEventListener("click", () => {
+  const btn = document.getElementById("submitBtn");
+  const qi = order[currentQIdx];
+  if (!document.querySelector(`input[name="q${qi}"]:checked`)) { showNavMsg("Select an answer for the last question before submitting."); return; }
+  if (!submitArmed) {
+    submitArmed = true;
+    btn.textContent = "Click again to confirm — answers cannot be changed after this";
+    setTimeout(() => { submitArmed = false; btn.textContent = "Submit Exam"; }, 6000);
+    return;
+  }
+  lockQuestion(currentQIdx);
+  submitExam(false);
+});
+
+function submitExam(auto) {
+  if (!currentState || currentState.submitted) return;
+  const form = document.getElementById("quizForm");
+  const answers = {};
+  QUESTIONS.forEach((q, qi) => {
+    const sel = form.querySelector(`input[name="q${qi}"]:checked`);
+    answers[qi] = sel ? parseInt(sel.value, 10) : -1;
+  });
+  quizActive = false;
+  let correct = 0;
+  const wrong = [];
+  QUESTIONS.forEach((q, qi) => { if (answers[qi] === q.a) correct++; else wrong.push(qi); });
+  currentState.correctCount = correct;
+  currentState.total = QUESTIONS.length;
+  currentState.scorePct = Math.round(1000 * correct / QUESTIONS.length) / 10;
+  currentState.wrong = wrong;
+  currentState.answers = answers;
+  currentState.answeredCount = Object.values(answers).filter(v => v >= 0).length;
+  currentState.submitted = true;
+  currentState.autoSubmitted = !!auto;
+  currentState.submittedAt = new Date().toISOString();
+  currentState.events = events;
+  saveState(currentKey, currentState);
+  renderSubmitted();
+}
+
+// =================== SUBMITTED SCREEN + FILE ===================
+async function sha256Hex(text) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+function canonicalRecord(s) {
+  return {
+    exam: s.exam, name: s.name, email: s.email,
+    startTime: new Date(s.startTime).toISOString(), submittedAt: s.submittedAt,
+    autoSubmitted: !!s.autoSubmitted, answers: s.answers, order: s.order,
+    correctCount: s.correctCount, total: s.total, scorePct: s.scorePct,
+    events: s.events || []
+  };
+}
+
+function renderSubmitted() {
+  quizActive = false;
+  ["landing", "quiz"].forEach(id => document.getElementById(id).classList.add("hidden"));
+  document.getElementById("results").classList.remove("hidden");
+  document.getElementById("calcToggle").classList.remove("visible");
+  document.getElementById("sheetToggle").classList.remove("visible");
+  toggleSheet(false);
+  document.getElementById("calcPanel").classList.remove("open");
+  document.getElementById("timerBar").classList.remove("visible");
+  document.body.classList.remove("quiz-active");
+  if (timerHandle) { clearInterval(timerHandle); timerHandle = null; }
+  if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(()=>{});
+
+  const s = currentState;
+  const flagged = (s.events || []).filter(e => !e.info).length;
+  document.getElementById("submittedBox").innerHTML = `
+    <div class="label" style="font-weight:700; color:var(--muted);">✓ EXAM SUBMITTED — YOUR SCORE</div>
+    <div class="big">${s.correctCount} / ${s.total} &nbsp;(${s.scorePct.toFixed(1)}%)</div>
+    <p>${s.autoSubmitted ? "Your exam was submitted automatically when time ran out." : "Your answers are locked."}</p>
+    <p>Answered: <strong>${s.answeredCount} of ${s.total}</strong> &nbsp;•&nbsp; Events recorded: <strong>${flagged}</strong></p>
+    <p class="muted">Submitted ${new Date(s.submittedAt).toLocaleString()}. Your instructor reviews every exam file before grades are posted on Blackboard.</p>`;
+  renderReview(s);
+
+  const fileName = `FIN4329_Midterm2_Makeup_${s.name.replace(/[^A-Za-z0-9]+/g, "_")}.json`;
+  document.getElementById("nextStepBlock").innerHTML = `
+    <div style="padding:16px; background:#fff8e1; border:2px solid var(--accent); border-radius:8px;">
+      <h3 style="color:var(--err); margin-top:0;">⚠ REQUIRED: upload your exam file to Blackboard</h3>
+      <ol style="font-size:14px; padding-left:22px; margin:8px 0;">
+        <li><strong>Click the button below.</strong> This requests <code>${fileName}</code>. If needed, use Save JSON or Compatibility download. A request does not confirm disk saving.</li>
+        ${IN_SEB ? `<li><strong>Ask the proctor to authorize exit with the Quit button of Safe Exam Browser.</strong> Then confirm the file in Downloads on Windows/Mac, or Files &gt; On My iPad &gt; SafeExamBrowser on iPad.</li>` : ""}
+        <li><strong>Upload that file to the "Midterm 2 Exam File" assignment on Blackboard</strong> before you leave the room.</li>
+      </ol>
+      <div style="margin-top:14px; text-align:center;">
+        <button id="downloadBtn" style="background:var(--brand); color:white; font-size:16px; padding:14px 28px;">📥 Download My Exam File</button>
+      </div>
+      <p style="font-size:12px; color:var(--muted); margin-top:10px; text-align:center;">
+        Upload the file exactly as downloaded. Do not open or edit it — edited files fail the integrity check.<br>
+        <strong>FERPA note:</strong> nothing is sent to any outside service. Blackboard is UTEP's official grade system.
+      </p>
+    </div>`;
+  document.getElementById("downloadBtn").onclick = async () => {
+    try {
+      const requested=await downloadResults(fileName);
+      if(!requested)return;
+      let note=document.getElementById('downloadRequestStatus');
+      if(!note){note=document.createElement('p');note.id='downloadRequestStatus';note.setAttribute('role','status');document.getElementById('nextStepBlock').appendChild(note);}
+      note.textContent='Download requested; a disk save is not yet confirmed. If needed, use Save JSON or the compatibility link. Ask the proctor to authorize exit with the Quit button of Safe Exam Browser. Then verify the file in Downloads on Windows/Mac or Files > On My iPad > Safe Exam Browser on iPad. Upload the unchanged JSON to Blackboard and verify the receipt before leaving.';
+    }catch(error){alert('Download preparation failed. Keep this page open and ask the proctor. '+error.message);}
+  };
+}
+
+function renderReview(s) {
+  let block = document.getElementById("reviewCard");
+  if (!block) {
+    block = document.createElement("div");
+    block.className = "card"; block.id = "reviewCard";
+    document.getElementById("results").appendChild(block);
+  }
+  if (!QUESTIONS) { block.innerHTML = ""; return; }
+  const { order: ord, choiceOrders: co } = buildOrder(s.email);
+  const cards = ord.map((qi, idx) => {
+    const q = QUESTIONS[qi], ans = s.answers[qi], ok = ans === q.a;
+    const choices = co[qi].map((origCi, pos) => {
+      const cls = origCi === ans ? (ok ? "correct-ans" : "wrong-ans") : "";
+      return `<label class="${cls}">${String.fromCharCode(65 + pos)}. ${q.choices[origCi]}</label>`;
+    }).join("");
+    return `<div class="q ${ok ? "correct" : "incorrect"}">
+      <div class="q-num">Question ${idx + 1} • ${ok ? "✓ Correct" : (ans === -1 ? "✗ Not answered" : "✗ Incorrect")}</div>
+      ${q.scenario ? `<div class="scenario-box">${q.scenario}</div>` : ""}
+      <div class="q-text">${q.q}</div>
+      <div class="choices">${choices}</div></div>`;
+  }).join("");
+  block.innerHTML = `<h2>Review: Your Answers</h2>
+    <p class="muted">Your answer is green if correct and red if incorrect. Correct answers and explanations are not shown during the exam.</p>${cards}`;
+}
+
+async function downloadResults(fileName) {
+  const record = canonicalRecord(currentState);
+  // Integrity seal: the key comes from the encrypted exam. If the page was reopened only
+  // to re-download (questions not decrypted), ask for the access code again.
+  if (!EXAM) {
+    const pwd = prompt("Enter the exam access code to download your file again:");
+    if (!pwd) return false;
+    try { EXAM = await decryptExam(pwd.trim()); QUESTIONS = EXAM.questions; }
+    catch { alert("Incorrect access code."); return false; }
+  }
+  const body = JSON.stringify(record);
+  record.integrity = await sha256Hex(EXAM.integrity + "|" + body);
+  record.downloadedAt = new Date().toISOString();
+  requestJSONFile(fileName,JSON.stringify(record,null,2),document.getElementById('nextStepBlock'));
+  return true;
+}
+
+// JSON export stays on this device. Genuine links remain usable if an automatic
+// request is refused. Blob objects are kept alive for this document's lifetime;
+// early revocation can race native WebKit's asynchronous download handling.
+function jsonDataURL(text) {
+  const bytes=new TextEncoder().encode(text);
+  let binary='';for(let i=0;i<bytes.length;i++)binary+=String.fromCharCode(bytes[i]);
+  return 'data:application/json;charset=utf-8;base64,'+encodeURIComponent(btoa(binary));
+}
+function requestJSONFile(filename,text,host,autoRequest=true) {
+  if(!host)throw Error('Download controls are unavailable. Keep this page open and contact the proctor.');
+  let controls=document.getElementById('jsonDownloadAlternatives');
+  if(!controls){controls=document.createElement('div');controls.id='jsonDownloadAlternatives';host.appendChild(controls);}
+  controls.replaceChildren();
+  const note=document.createElement('p');
+  note.textContent='The file is prepared locally. If the automatic request does not save it, click Save JSON below. If that is blocked, try the compatibility download. Confirm the file exists after authorized exit; this page cannot verify a disk save.';
+  controls.appendChild(note);
+  const blobURL=URL.createObjectURL(new Blob([text],{type:'application/json'}));
+  const primary=document.createElement('a');primary.id='jsonDownloadLink';primary.href=blobURL;primary.download=filename;primary.textContent='Save JSON';
+  const alternate=document.createElement('a');alternate.id='jsonCompatibilityLink';alternate.href=jsonDataURL(text);alternate.download=filename;alternate.textContent='Compatibility JSON download';
+  for(const link of [primary,alternate]){
+    link.style.cssText='display:inline-block;margin:0 12px 12px 0;padding:12px;border:2px solid #111;color:#111;background:#fff;font-weight:bold;text-decoration:underline;';
+    link.setAttribute('aria-label',link.textContent+' — '+filename);controls.appendChild(link);
+  }
+  if(autoRequest)primary.click();
+  return {filename,blobURL,compatibilityURL:alternate.href,requested:!!autoRequest};
+}
+
+
+// =================== CALCULATOR ===================
+function calcAppend(s) { const inp = document.getElementById("calcInput"); inp.value += s; inp.focus(); calcTryEval(); }
+function calcClear() { document.getElementById("calcInput").value = ""; document.getElementById("calcResult").textContent = "0"; }
+function calcBackspace() { const inp = document.getElementById("calcInput"); inp.value = inp.value.slice(0, -1); calcTryEval(); }
+function calcEval() { calcTryEval(); }
+function calcTryEval() {
+  const expr = document.getElementById("calcInput").value.trim().replace(/,/g, "");
+  const out = document.getElementById("calcResult");
+  if (!expr) { out.textContent = "0"; return; }
+  if (!/^[0-9+\-*/().\s]+$/.test(expr)) { out.textContent = "(only numbers and + − × ÷ ( ) allowed)"; return; }
+  try {
+    const result = Function('"use strict"; return (' + expr + ')')();
+    out.textContent = (typeof result === "number" && isFinite(result))
+      ? result.toLocaleString(undefined, { maximumFractionDigits: 6 }) : "?";
+  } catch (e) { out.textContent = "?"; }
+}
+(function initCalc() {
+  const inp = document.getElementById("calcInput");
+  inp.addEventListener("input", calcTryEval);
+  inp.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); calcEval(); } });
+  const panel = document.getElementById("calcPanel"), header = document.getElementById("calcHeader");
+  let dragging = false, ox = 0, oy = 0;
+  header.addEventListener("mousedown", (e) => { dragging = true; const r = panel.getBoundingClientRect(); ox = e.clientX - r.left; oy = e.clientY - r.top; });
+  document.addEventListener("mousemove", (e) => { if (!dragging) return; panel.style.left = (e.clientX - ox) + "px"; panel.style.top = (e.clientY - oy) + "px"; panel.style.right = "auto"; });
+  document.addEventListener("mouseup", () => { dragging = false; });
+})();
+
+// =================== SPREADSHEET ===================
+const SHEET_COLS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""), SHEET_ROWS = 99;
+let sheet = {};          // raw contents by cell id, e.g. { B2: "=A2*3" }
+let sheetSel = "A1";
+let SHEET_HINT = "";
+
+function toggleSheet(force) {
+  const p = document.getElementById("sheetPanel");
+  const open = force === undefined ? !p.classList.contains("open") : force;
+  p.classList.toggle("open", open);
+  if (open) sheetCellInput(sheetSel).focus();
+}
+function sheetCellInput(id) { return document.getElementById("sc_" + id); }
+
+function sheetBuild() {
+  const g = document.getElementById("sheetGrid");
+  let html = "<tr><th class='rowh'></th>" + SHEET_COLS.map(c => `<th>${c}</th>`).join("") + "</tr>";
+  for (let r = 1; r <= SHEET_ROWS; r++) {
+    html += `<tr><th class="rowh">${r}</th>` + SHEET_COLS.map(c => `<td><input id="sc_${c}${r}" aria-label="Cell ${c}${r}" data-id="${c}${r}" autocomplete="off"></td>`).join("") + "</tr>";
+  }
+  g.innerHTML = html;
+  g.querySelectorAll("input").forEach(inp => {
+    inp.addEventListener("focus", () => {
+      sheetSel = inp.dataset.id; inp.value = sheet[sheetSel] || ""; inp.dataset.edit = ""; inp.select();   // typing replaces, as in Excel
+      sheetEnd = sheetSel; sheetShowBar(); sheetPaintSel();
+    });
+    inp.addEventListener("input", () => { document.getElementById("sheetFx").value = inp.value; sheetTip(inp); });
+    inp.addEventListener("keyup", () => sheetTip(inp));
+    inp.addEventListener("mouseup", () => { if (inp === document.activeElement) sheetTip(inp); });
+    inp.addEventListener("blur", () => { sheetTip(null); sheetCommit(inp.dataset.id, inp.value); });
+    inp.addEventListener("keydown", (e) => {
+      if (sheetKey(e, inp)) return;
+      if (e.key === "Enter") { e.preventDefault(); sheetMove(inp.dataset.id, 0, e.shiftKey ? -1 : 1); }
+      else if (e.key === "ArrowDown") { e.preventDefault(); sheetMove(inp.dataset.id, 0, 1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); sheetMove(inp.dataset.id, 0, -1); }
+      else if (e.key === "Escape") { inp.value = sheet[inp.dataset.id] || ""; inp.blur(); }
+    });
+  });
+  g.addEventListener("mousedown", (e) => {
+    const inp = e.target.closest ? e.target.closest("input") : null;
+    if (!inp || !inp.dataset.id) return;
+    const a = document.activeElement;
+    const editor = a && (a.id === "sheetFx" || (a.dataset && a.dataset.id)) ? a : null;
+    if (editor && inp !== editor && sheetPointable(editor)) {          // typing a formula: insert this cell's reference
+      e.preventDefault();
+      sheetPoint = { el: editor, start: editor.selectionStart, len: editor.selectionEnd - editor.selectionStart, anchor: inp.dataset.id };
+      sheetPointTo(inp.dataset.id);
+      return;
+    }
+    if (e.shiftKey && a && a.dataset && a.dataset.id) { e.preventDefault(); sheetEnd = inp.dataset.id; sheetPaintSel(); return; }
+    sheetDragFrom = inp.dataset.id;
+    if (inp === a) {
+      sheetEnd = sheetSel; sheetPaintSel();
+      if (!sheetEditing(inp)) { e.preventDefault(); inp.select(); }   // clicking the active cell again keeps it ready for typing
+    } else { e.preventDefault(); inp.focus(); }
+  });
+  g.addEventListener("dblclick", (e) => {     // double-click edits: cursor at the end, as Excel does
+    const inp = e.target.closest ? e.target.closest("input") : null;
+    if (inp && inp === document.activeElement) { inp.dataset.edit = "1"; const n = inp.value.length; inp.setSelectionRange(n, n); }
+  });
+  g.addEventListener("mouseover", (e) => {
+    const inp = e.target.closest ? e.target.closest("input") : null;
+    if (sheetPoint) {
+      if (!(e.buttons & 1)) { sheetPoint = null; return; }
+      if (inp && inp.dataset.id) sheetPointTo(inp.dataset.id);
+      return;
+    }
+    if (!sheetDragFrom) return;
+    if (!(e.buttons & 1)) { sheetDragFrom = null; return; }
+    if (inp && inp.dataset.id && inp.dataset.id !== sheetEnd) { sheetEnd = inp.dataset.id; sheetPaintSel(); }
+  });
+  g.addEventListener("dragstart", (e) => e.preventDefault());   // never drag a cell's text into another cell
+  document.addEventListener("mouseup", () => { sheetDragFrom = null; sheetPoint = null; });
+  const fx = document.getElementById("sheetFx");
+  let fxTarget = null;
+  fx.addEventListener("focus", () => { fxTarget = sheetSel; });
+  fx.addEventListener("blur", () => {          // an edit made in the formula bar is kept when the student clicks elsewhere
+    sheetTip(null);
+    if (fxTarget && fx.value.trim() !== (sheet[fxTarget] || "")) sheetCommit(fxTarget, fx.value);
+  });
+  fx.addEventListener("input", () => { const c = sheetCellInput(sheetSel); if (c) c.value = fx.value; sheetTip(fx); });
+  fx.addEventListener("keyup", () => sheetTip(fx));
+  fx.addEventListener("mouseup", () => sheetTip(fx));
+  fx.addEventListener("keydown", (e) => {
+    const k = (e.key || "").toLowerCase();
+    if (e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey && (k === "d" || k === "r")) { e.preventDefault(); sheetFill(k === "d" ? "down" : "right"); return; }
+    if (e.key === "Enter") { e.preventDefault(); sheetCommit(sheetSel, fx.value); sheetMove(sheetSel, 0, 1); }
+  });
+}
+function sheetShowBar() {
+  document.getElementById("sheetRef").textContent = sheetSel;
+  document.getElementById("sheetFx").value = sheet[sheetSel] || "";
+}
+function sheetMove(id, dc, dr) {
+  const c = SHEET_COLS.indexOf(id[0]), r = parseInt(id.slice(1), 10);
+  const nc = Math.min(Math.max(c + dc, 0), SHEET_COLS.length - 1);
+  const nr = Math.min(Math.max(r + dr, 1), SHEET_ROWS);
+  sheetCellInput(SHEET_COLS[nc] + nr).focus();
+}
+// =================== SELECTION AND FILL ===================
+// As in Excel: drag, Shift+click or Shift+arrows select a range; Ctrl+D fills down, Ctrl+R fills right,
+// the Fill buttons fill in any direction; Ctrl+Enter puts one entry in every selected cell.
+// "$" locks the column or row of a reference ($B$1, $B1, B$1). While typing a formula, clicking or dragging
+// over cells inserts their reference.
+let sheetEnd = "A1";          // far corner of the selection; the active cell (sheetSel) is the other corner
+let sheetDragFrom = null;     // set while the mouse is selecting
+let sheetPoint = null;        // set while a clicked or dragged reference is being inserted into a formula
+let sheetUndo = null;         // earlier contents of the cells changed by the last fill or range clear
+let sheetPainted = [];
+
+function sheetCR(id) { return [SHEET_COLS.indexOf(id[0]), parseInt(id.slice(1), 10)]; }
+function sheetRect() {
+  const [c1, r1] = sheetCR(sheetSel), [c2, r2] = sheetCR(sheetEnd);
+  return { c1: Math.min(c1, c2), c2: Math.max(c1, c2), r1: Math.min(r1, r2), r2: Math.max(r1, r2) };
+}
+function sheetPaintSel() {
+  for (const id of sheetPainted) { const i = sheetCellInput(id); if (i) i.classList.remove("sel"); }
+  sheetPainted = [];
+  const ref = document.getElementById("sheetRef");
+  if (sheetEnd === sheetSel) { ref.textContent = sheetSel; return; }
+  const R = sheetRect();
+  for (let r = R.r1; r <= R.r2; r++) for (let c = R.c1; c <= R.c2; c++) {
+    const id = SHEET_COLS[c] + r;
+    sheetCellInput(id).classList.add("sel");
+    sheetPainted.push(id);
+  }
+  ref.textContent = SHEET_COLS[R.c1] + R.r1 + ":" + SHEET_COLS[R.c2] + R.r2;
+}
+// a cell is being edited once its text differs from what is stored, or after F2 / double-click
+function sheetEditing(inp) { return inp.value !== (sheet[inp.dataset.id] || "") || inp.dataset.edit === "1"; }
+// Move a formula by (dc, dr): every reference shifts unless "$" locks it; text inside quotes is left alone.
+function sheetShift(raw, dc, dr) {
+  if (!raw || raw[0] !== "=") return raw;
+  return "=" + raw.slice(1).split(/("(?:[^"]|"")*")/).map((part, i) => i % 2 ? part :
+    part.replace(/(^|[^A-Za-z0-9_.$])(\$?)([A-Za-z])(\$?)(\d{1,2})(?![A-Za-z0-9_.(])/g, (m, pre, ca, col, ra, row) => {
+      let c = SHEET_COLS.indexOf(col.toUpperCase()), r = parseInt(row, 10);
+      if (!ca) c += dc;
+      if (!ra) r += dr;
+      if (c < 0 || c >= SHEET_COLS.length || r < 1 || r > SHEET_ROWS) return pre + "#REF!";
+      return pre + ca + SHEET_COLS[c] + ra + r;
+    })).join("");
+}
+// after a fill, undo or clear, the active cell is ready for typing again: the next key replaces it
+function sheetReady() {
+  const a = document.activeElement;
+  if (a && a.dataset && a.dataset.id) { a.value = sheet[a.dataset.id] || ""; a.dataset.edit = ""; a.select(); }
+  sheetShowBar();
+  sheetPaintSel();
+}
+function sheetApply(changes) {
+  const ids = Object.keys(changes);
+  if (!ids.length) return;
+  const before = {};
+  for (const id of ids) before[id] = sheet[id];
+  for (const id of ids) { if (changes[id] === undefined) delete sheet[id]; else sheet[id] = changes[id]; }
+  sheetUndo = before;
+  sheetRender();
+  sheetSave();
+  sheetReady();
+}
+// commit whatever is being typed (in the active cell or the formula bar) before acting on the sheet
+function sheetCommitPending() {
+  const a = document.activeElement, fx = document.getElementById("sheetFx");
+  if (a === fx) { if (fx.value.trim() !== (sheet[sheetSel] || "")) sheetCommit(sheetSel, fx.value); }
+  else if (a && a.dataset && a.dataset.id && a.value !== (sheet[a.dataset.id] || "")) sheetCommit(a.dataset.id, a.value);
+}
+function sheetFill(dir) {
+  sheetCommitPending();
+  const R = sheetRect(), changes = {};
+  if (dir === "down" || dir === "up") {
+    const src = R.r1 === R.r2 ? (dir === "down" ? R.r1 - 1 : R.r1 + 1) : (dir === "down" ? R.r1 : R.r2);
+    if (src < 1 || src > SHEET_ROWS) return;
+    for (let c = R.c1; c <= R.c2; c++) {
+      const raw = sheet[SHEET_COLS[c] + src];
+      for (let r = R.r1; r <= R.r2; r++) if (r !== src) changes[SHEET_COLS[c] + r] = raw === undefined ? undefined : sheetShift(raw, 0, r - src);
+    }
+  } else {
+    const src = R.c1 === R.c2 ? (dir === "right" ? R.c1 - 1 : R.c1 + 1) : (dir === "right" ? R.c1 : R.c2);
+    if (src < 0 || src >= SHEET_COLS.length) return;
+    for (let r = R.r1; r <= R.r2; r++) {
+      const raw = sheet[SHEET_COLS[src] + r];
+      for (let c = R.c1; c <= R.c2; c++) if (c !== src) changes[SHEET_COLS[c] + r] = raw === undefined ? undefined : sheetShift(raw, c - src, 0);
+    }
+  }
+  sheetApply(changes);
+}
+// Ctrl+Enter: the active cell's entry goes into every selected cell, adjusted like a fill
+function sheetFillSelection() {
+  sheetCommitPending();
+  const raw = sheet[sheetSel], R = sheetRect(), [ac, ar] = sheetCR(sheetSel), changes = {};
+  for (let r = R.r1; r <= R.r2; r++) for (let c = R.c1; c <= R.c2; c++) {
+    const id = SHEET_COLS[c] + r;
+    if (id !== sheetSel) changes[id] = raw === undefined ? undefined : sheetShift(raw, c - ac, r - ar);
+  }
+  sheetApply(changes);
+}
+function sheetClearRange() {
+  const R = sheetRect(), changes = {};
+  for (let r = R.r1; r <= R.r2; r++) for (let c = R.c1; c <= R.c2; c++) changes[SHEET_COLS[c] + r] = undefined;
+  sheetApply(changes);
+}
+function sheetUndoLast() {
+  if (!sheetUndo) return;
+  const before = sheetUndo;
+  sheetUndo = null;
+  for (const id of Object.keys(before)) { if (before[id] === undefined) delete sheet[id]; else sheet[id] = before[id]; }
+  sheetRender();
+  sheetSave();
+  sheetReady();
+}
+// point mode: is the caret in a formula right after an operator, "(" or ","?
+function sheetPointable(el) {
+  const v = el.value, s = el.selectionStart;
+  return v[0] === "=" && s !== null && /[=+\-*/^(,:<>&]\s*$/.test(v.slice(0, s));
+}
+function sheetPointTo(id) {
+  const P = sheetPoint, el = P.el;
+  let ref = id;
+  if (id !== P.anchor) {
+    const [c1, r1] = sheetCR(P.anchor), [c2, r2] = sheetCR(id);
+    ref = SHEET_COLS[Math.min(c1, c2)] + Math.min(r1, r2) + ":" + SHEET_COLS[Math.max(c1, c2)] + Math.max(r1, r2);
+  }
+  el.value = el.value.slice(0, P.start) + ref + el.value.slice(P.start + P.len);
+  P.len = ref.length;
+  el.setSelectionRange(P.start + P.len, P.start + P.len);
+  if (el.id === "sheetFx") { const c = sheetCellInput(sheetSel); if (c) c.value = el.value; }
+  else document.getElementById("sheetFx").value = el.value;
+  sheetTip(el);
+}
+// Keys handled inside a cell; returns true when the key was used here.
+function sheetKey(e, inp) {
+  const k = (e.key || "").toLowerCase(), editing = sheetEditing(inp);
+  const ctrlOnly = e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey;
+  if (ctrlOnly && (k === "d" || k === "r")) { e.preventDefault(); sheetFill(k === "d" ? "down" : "right"); return true; }
+  if (ctrlOnly && k === "z" && !editing) { e.preventDefault(); sheetUndoLast(); return true; }   // never the browser's own undo
+  if (ctrlOnly && k === "enter") { e.preventDefault(); sheetFillSelection(); inp.select(); return true; }
+  if (k === "f2" && !e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey) {
+    e.preventDefault(); inp.dataset.edit = "1"; const n = inp.value.length; inp.setSelectionRange(n, n); return true;
+  }
+  if (e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
+    const d = { arrowdown: [0, 1], arrowup: [0, -1], arrowright: [1, 0], arrowleft: [-1, 0] }[k];
+    if (d && (d[0] === 0 || !editing)) {
+      e.preventDefault();
+      const [c, r] = sheetCR(sheetEnd);
+      sheetEnd = SHEET_COLS[Math.min(Math.max(c + d[0], 0), SHEET_COLS.length - 1)] + Math.min(Math.max(r + d[1], 1), SHEET_ROWS);
+      sheetPaintSel();
+      return true;
+    }
+  }
+  if (k === "delete" && !editing && sheetEnd !== sheetSel) { e.preventDefault(); sheetClearRange(); return true; }
+  return false;
+}
+// argument tips, as Excel shows them: =PV( shows PV(rate, nper, pmt, [fv], [type]) with the current argument in bold
+const SHEET_SIG = {
+  SUM: ["number1", "[number2]", "..."], AVERAGE: ["number1", "[number2]", "..."],
+  MIN: ["number1", "[number2]", "..."], MAX: ["number1", "[number2]", "..."],
+  SUMPRODUCT: ["array1", "[array2]", "..."], ROUND: ["number", "num_digits"], ROUNDUP: ["number", "num_digits"],
+  INT: ["number"], ABS: ["number"], EXP: ["number"], IF: ["logical_test", "[value_if_true]", "[value_if_false]"],
+  PMT: ["rate", "nper", "pv", "[fv]", "[type]"], RATE: ["nper", "pmt", "pv", "[fv]", "[type]", "[guess]"],
+  NPER: ["rate", "pmt", "pv", "[fv]", "[type]"], PV: ["rate", "nper", "pmt", "[fv]", "[type]"],
+  FV: ["rate", "nper", "pmt", "[pv]", "[type]"],
+};
+function sheetTip(el) {
+  const tip = document.getElementById("sheetTip");
+  tip.textContent = "";
+  tip.classList.remove("show");
+  if (!el || el.value[0] !== "=" || el.selectionStart === null) return;
+  const s = el.value.slice(1, el.selectionStart).replace(/"(?:[^"]|"")*"?/g, '""');
+  const stack = [];
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+    if (ch === "(") { const m = /([A-Za-z][A-Za-z0-9.]*)$/.exec(s.slice(0, i)); stack.push({ name: m ? m[1].toUpperCase() : null, arg: 0 }); }
+    else if (ch === ")") stack.pop();
+    else if (ch === "," && stack.length) stack[stack.length - 1].arg++;
+  }
+  for (let j = stack.length - 1; j >= 0; j--) {
+    const f = stack[j];
+    if (f.name && SHEET_SIG[f.name]) { sheetTipShow([[f.name, f.arg]]); return; }
+    if (f.name) return;
+  }
+  const m = /(^|[^A-Za-z0-9.$])([A-Za-z]+)$/.exec(s);          // a function name being typed
+  if (m) {
+    const pre = m[2].toUpperCase(), names = Object.keys(SHEET_SIG).filter(n => n.startsWith(pre));
+    if (names.length) sheetTipShow(names.map(n => [n, -1]));
+  }
+}
+function sheetTipShow(items) {
+  const tip = document.getElementById("sheetTip");
+  items.forEach(([name, arg], k) => {
+    if (k) tip.appendChild(document.createTextNode("    "));
+    const sig = SHEET_SIG[name];
+    let hi = arg;
+    if (hi >= 0 && (hi >= sig.length || sig[hi] === "...")) hi = sig.indexOf("...") > 0 ? sig.indexOf("...") - 1 : sig.length - 1;
+    tip.appendChild(document.createTextNode(name + "("));
+    sig.forEach((a, i) => {
+      if (i) tip.appendChild(document.createTextNode(", "));
+      if (i === hi) { const b = document.createElement("b"); b.textContent = a; tip.appendChild(b); }
+      else tip.appendChild(document.createTextNode(a));
+    });
+    tip.appendChild(document.createTextNode(")"));
+    if (hi >= 0 && sig[hi] === "[type]") tip.appendChild(document.createTextNode("   type: 0 = end of period, 1 = beginning"));
+  });
+  tip.classList.add("show");
+}
+function sheetCommit(id, raw) {
+  raw = (raw || "").trim();
+  if (raw !== (sheet[id] || "")) sheetUndo = null;      // a typed change ends the chance to undo the last fill
+  if (raw) sheet[id] = raw; else delete sheet[id];
+  sheetRender();
+  sheetSave();
+}
+let sheetClearArmed = 0;
+function sheetClear() {
+  const now = Date.now();
+  const hint = document.getElementById("sheetHint");
+  if (now - sheetClearArmed > 4000) {
+    sheetClearArmed = now;
+    hint.textContent = "Click \"Clear all\" again within 4 seconds to erase the whole sheet.";
+    setTimeout(() => { hint.innerHTML = SHEET_HINT; }, 4000);
+    return;
+  }
+  sheetClearArmed = 0;
+  sheet = {}; sheetUndo = null; sheetRender(); sheetSave(); sheetShowBar(); sheetPaintSel();
+  hint.innerHTML = SHEET_HINT;
+}
+
+// ---- formula engine: a small Excel-style parser and evaluator (no eval, no Function)
+// Precedence follows Excel: negation > % > ^ (left to right) > * / > + - > & > comparisons.
+// A blank cell is null: 0 in arithmetic, "" in text, and skipped by SUM/AVERAGE/MIN/MAX.
+function sheetParseNumber(s) {
+  let t = s.replace(/[$,\s]/g, "");
+  let neg = false, pct = false;
+  if (/^\(.*\)$/.test(t)) { neg = true; t = t.slice(1, -1); }
+  if (t.endsWith("%")) { pct = true; t = t.slice(0, -1); }
+  if (!/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(t)) return null;
+  let n = parseFloat(t);
+  if (pct) n /= 100;
+  return neg ? -n : n;
+}
+let sheetMemo = null;   // per-render cache, so a long column of formulas is evaluated once
+function sheetValue(id, seen) {
+  const raw = sheet[id];
+  if (raw === undefined || raw === "") return null;
+  if (raw[0] !== "=") {
+    const u = raw.trim().toUpperCase();
+    if (u === "TRUE" || u === "FALSE") return u === "TRUE";
+    const n = sheetParseNumber(raw);
+    return n === null ? raw : n;
+  }
+  if (sheetMemo && sheetMemo.has(id)) { const m = sheetMemo.get(id); if (m.err) throw m.err; return m.v; }
+  if (seen.has(id)) throw new Error("#CYCLE");
+  seen.add(id);
+  let v, err = null;
+  try { v = sheetEval(raw.slice(1), seen); } catch (e) { err = e; }
+  seen.delete(id);
+  if (sheetMemo && !(err && err.message === "#CYCLE")) sheetMemo.set(id, err ? { err } : { v });
+  if (err) throw err;
+  return v;
+}
+function sheetErr(code) { return new Error(code); }
+function sheetRefId(s) {
+  const m = /^\$?([A-Z]{1,3})\$?(\d+)$/.exec(s);
+  if (!m) return null;
+  const c = SHEET_COLS.indexOf(m[1]), r = parseInt(m[2], 10);
+  return (c < 0 || r < 1 || r > SHEET_ROWS) ? "#REF" : SHEET_COLS[c] + r;
+}
+function sheetTokens(src) {
+  const toks = [];
+  let i = 0;
+  while (i < src.length) {
+    const ch = src[i], rest = src.slice(i);
+    if (ch === " " || ch === "\t" || ch === "\n" || ch === "\r") { i++; continue; }
+    if (ch === '"') {
+      let j = i + 1, s = "";
+      for (;;) {
+        if (j >= src.length) throw sheetErr("#ERROR");
+        if (src[j] === '"') { if (src[j + 1] === '"') { s += '"'; j += 2; continue; } break; }
+        s += src[j++];
+      }
+      toks.push({ t: "str", v: s }); i = j + 1; continue;
+    }
+    let m = /^(\d+\.?\d*|\.\d+)(e[+-]?\d+)?/i.exec(rest);
+    if (m) { toks.push({ t: "num", v: parseFloat(m[0]) }); i += m[0].length; continue; }
+    m = /^#REF!?/i.exec(rest);
+    if (m) { toks.push({ t: "err", v: "#REF" }); i += m[0].length; continue; }
+    m = /^[$A-Za-z][$A-Za-z0-9.]*/.exec(rest);
+    if (m) { toks.push({ t: "id", v: m[0].toUpperCase() }); i += m[0].length; continue; }
+    const two = src.substr(i, 2);
+    if (two === "<=" || two === ">=" || two === "<>") { toks.push({ t: "op", v: two }); i += 2; continue; }
+    if ("+-*/^%&=<>(),:".indexOf(ch) >= 0) { toks.push({ t: "op", v: ch }); i++; continue; }
+    throw sheetErr("#NAME");
+  }
+  return toks;
+}
+function sheetParse(src) {
+  const toks = sheetTokens(src.replace(/−/g, "-"));
+  let p = 0;
+  const isOp = (v) => p < toks.length && toks[p].t === "op" && toks[p].v === v;
+  const fail = () => { throw sheetErr("#ERROR"); };
+  const CMP = ["=", "<>", "<", ">", "<=", ">="];
+  function cmp() { let l = cat(); while (p < toks.length && toks[p].t === "op" && CMP.indexOf(toks[p].v) >= 0) { const op = toks[p++].v; l = { k: "bin", op, l, r: cat() }; } return l; }
+  function cat() { let l = add(); while (isOp("&")) { p++; l = { k: "bin", op: "&", l, r: add() }; } return l; }
+  function add() { let l = mul(); while (isOp("+") || isOp("-")) { const op = toks[p++].v; l = { k: "bin", op, l, r: mul() }; } return l; }
+  function mul() { let l = pow(); while (isOp("*") || isOp("/")) { const op = toks[p++].v; l = { k: "bin", op, l, r: pow() }; } return l; }
+  function pow() { let l = una(); while (isOp("^")) { p++; l = { k: "bin", op: "^", l, r: una() }; } return l; }
+  function una() { if (isOp("-") || isOp("+")) { const op = toks[p++].v; return { k: "un", op, x: una() }; } return pct(); }
+  function pct() { let x = prim(); while (isOp("%")) { p++; x = { k: "pct", x }; } return x; }
+  function prim() {
+    const tk = toks[p++];
+    if (!tk) fail();
+    if (tk.t === "num" || tk.t === "str") return { k: "lit", v: tk.v };
+    if (tk.t === "err") { if (isOp(":")) p += 2; return { k: "err", v: tk.v }; }   // #REF! as either end of a range
+    if (tk.t === "op" && tk.v === "(") { const x = cmp(); if (!isOp(")")) fail(); p++; return x; }
+    if (tk.t !== "id") fail();
+    if (isOp("(")) {
+      p++;
+      const args = [];   // an empty argument, as in PMT(r,n,pv,,1), takes the function's default
+      if (!isOp(")")) for (;;) { args.push(isOp(",") || isOp(")") ? { k: "missing" } : cmp()); if (isOp(",")) { p++; continue; } break; }
+      if (!isOp(")")) fail();
+      p++;
+      if (!Object.prototype.hasOwnProperty.call(SHEET_FN, tk.v)) throw sheetErr("#NAME");
+      return { k: "fn", name: tk.v, args };
+    }
+    if (tk.v === "TRUE" || tk.v === "FALSE") return { k: "lit", v: tk.v === "TRUE" };
+    const a = sheetRefId(tk.v);
+    if (!a) throw sheetErr("#NAME");
+    if (isOp(":")) {
+      p++;
+      const t2 = toks[p++];
+      if (t2 && t2.t === "err") return { k: "err", v: "#REF" };
+      const b = t2 && t2.t === "id" ? sheetRefId(t2.v) : null;
+      if (!b) fail();
+      if (a === "#REF" || b === "#REF") return { k: "err", v: "#REF" };
+      return { k: "range", a, b };
+    }
+    return a === "#REF" ? { k: "err", v: "#REF" } : { k: "ref", id: a };
+  }
+  const ast = cmp();
+  if (p !== toks.length) fail();
+  return ast;
+}
+function sheetFinite(x) { if (!isFinite(x)) throw sheetErr("#NUM"); return x; }
+function sheetScalar(v) { if (Array.isArray(v)) throw sheetErr("#VALUE"); return v; }
+function sheetToNum(v) {
+  v = sheetScalar(v);
+  if (v === null || v === undefined) return 0;
+  if (typeof v === "number") return v;
+  if (typeof v === "boolean") return v ? 1 : 0;
+  const n = sheetParseNumber(String(v));
+  if (n === null) throw sheetErr("#VALUE");
+  return n;
+}
+function sheetToText(v) {
+  v = sheetScalar(v);
+  if (v === null || v === undefined) return "";
+  if (typeof v === "boolean") return v ? "TRUE" : "FALSE";
+  if (typeof v === "number") return String(Number(v.toPrecision(15)));
+  return v;
+}
+function sheetCompare(a, b, op) {
+  a = sheetScalar(a); b = sheetScalar(b);
+  const blankAs = (other) => typeof other === "string" ? "" : typeof other === "boolean" ? false : 0;
+  if (a === null || a === undefined) a = blankAs(b === null || b === undefined ? 0 : b);
+  if (b === null || b === undefined) b = blankAs(a);
+  const rank = (v) => typeof v === "number" ? 0 : typeof v === "string" ? 1 : 2;
+  let c;
+  if (rank(a) !== rank(b)) c = rank(a) - rank(b);
+  else if (typeof a === "string") { const x = a.toUpperCase(), y = b.toUpperCase(); c = x < y ? -1 : x > y ? 1 : 0; }
+  else { const x = Number(Number(a).toPrecision(15)), y = Number(Number(b).toPrecision(15)); c = x < y ? -1 : x > y ? 1 : 0; }
+  return op === "=" ? c === 0 : op === "<>" ? c !== 0 : op === "<" ? c < 0 : op === ">" ? c > 0 : op === "<=" ? c <= 0 : c >= 0;
+}
+function sheetShaped(arr, rows, cols) { arr.rows = rows; arr.cols = cols; return arr; }
+function sheetRangeValues(a, b, seen) {
+  const c1 = SHEET_COLS.indexOf(a[0]), r1 = parseInt(a.slice(1), 10), c2 = SHEET_COLS.indexOf(b[0]), r2 = parseInt(b.slice(1), 10);
+  const out = [];
+  for (let r = Math.min(r1, r2); r <= Math.max(r1, r2); r++)
+    for (let c = Math.min(c1, c2); c <= Math.max(c1, c2); c++) out.push(sheetValue(SHEET_COLS[c] + r, seen));
+  return sheetShaped(out, Math.abs(r2 - r1) + 1, Math.abs(c2 - c1) + 1);
+}
+// Excel array arithmetic: an operator applied to a range works cell by cell (e.g. SUMPRODUCT(A1:A3*B1:B3))
+function sheetMap(a, b, f) {
+  const A = Array.isArray(a), B = Array.isArray(b);
+  if (!A && !B) return f(a, b);
+  const s = A ? a : b;
+  if (A && B && (a.rows !== b.rows || a.cols !== b.cols)) throw sheetErr("#VALUE");
+  const out = [];
+  for (let i = 0; i < s.length; i++) out.push(f(A ? a[i] : a, B ? b[i] : b));
+  return sheetShaped(out, s.rows, s.cols);
+}
+function sheetBin(op, a, b) {
+  switch (op) {
+    case "+": return sheetFinite(sheetToNum(a) + sheetToNum(b));
+    case "-": return sheetFinite(sheetToNum(a) - sheetToNum(b));
+    case "*": return sheetFinite(sheetToNum(a) * sheetToNum(b));
+    case "/": { const x = sheetToNum(a), d = sheetToNum(b); if (d === 0) throw sheetErr("#DIV/0"); return sheetFinite(x / d); }
+    case "^": { const x = sheetToNum(a), y = sheetToNum(b); if (x === 0 && y <= 0) throw sheetErr(y === 0 ? "#NUM" : "#DIV/0"); return sheetFinite(Math.pow(x, y)); }
+    case "&": return sheetToText(a) + sheetToText(b);
+    default: return sheetCompare(a, b, op);
+  }
+}
+function sheetEvalNode(n, seen) {
+  switch (n.k) {
+    case "lit": return n.v;
+    case "missing": return undefined;
+    case "err": throw sheetErr(n.v);
+    case "ref": return sheetValue(n.id, seen);
+    case "range": return sheetRangeValues(n.a, n.b, seen);
+    case "un": return sheetMap(sheetEvalNode(n.x, seen), null, (x) => n.op === "-" ? sheetFinite(-sheetToNum(x)) : x);
+    case "pct": return sheetMap(sheetEvalNode(n.x, seen), null, (x) => sheetToNum(x) / 100);
+    case "fn": return sheetCall(n, seen);
+    case "bin": return sheetMap(sheetEvalNode(n.l, seen), sheetEvalNode(n.r, seen), (a, b) => sheetBin(n.op, a, b));
+  }
+  throw sheetErr("#ERROR");
+}
+const SHEET_AGG = { SUM: 1, AVERAGE: 1, MIN: 1, MAX: 1, SUMPRODUCT: 1 };
+function sheetCall(n, seen) {
+  if (n.name === "IF") {   // only the chosen branch is evaluated, as in Excel
+    if (n.args.length < 2 || n.args.length > 3) throw sheetErr("#ERROR");
+    let c = sheetScalar(sheetEvalNode(n.args[0], seen));
+    if (typeof c === "string") { const u = c.toUpperCase(); if (u !== "TRUE" && u !== "FALSE") throw sheetErr("#VALUE"); c = u === "TRUE"; }
+    if (typeof c === "number" ? c !== 0 : c) return sheetEvalNode(n.args[1], seen);
+    return n.args.length === 3 ? sheetEvalNode(n.args[2], seen) : false;
+  }
+  // in SUM, AVERAGE, MIN, MAX and SUMPRODUCT a cell reference behaves like a one-cell range (blanks, text, TRUE skipped)
+  const args = n.args.map((a) => {
+    const v = sheetEvalNode(a, seen);
+    return SHEET_AGG[n.name] && a.k === "ref" ? sheetShaped([v], 1, 1) : v;
+  });
+  const v = SHEET_FN[n.name](args);
+  return typeof v === "number" ? sheetFinite(v) : v;
+}
+// numbers from arguments: inside ranges, text, TRUE/FALSE and blanks are skipped (as in Excel)
+function sheetNums(args) {
+  const out = [];
+  for (const x of args) {
+    if (Array.isArray(x)) { for (const y of x) if (typeof y === "number") out.push(y); }
+    else out.push(sheetToNum(x));
+  }
+  return out;
+}
+function sheetArg(a, i) { if (i >= a.length) throw sheetErr("#ERROR"); return sheetToNum(a[i]); }
+function sheetOpt(a, i, d) { return a[i] === undefined ? d : sheetToNum(a[i]); }
+function sheetRound(x, d, up) {
+  d = Math.trunc(d);
+  const f = Math.pow(10, d), s = x < 0 ? -1 : 1;
+  const y = Number((Math.abs(x) * f).toPrecision(15));
+  return s * (up ? Math.ceil(y) : Math.round(y)) / f;
+}
+// RATE: Newton's method from the guess, then a bracketed bisection if Newton does not settle
+function sheetSolve(f, guess, scale) {
+  let x = guess;
+  for (let i = 0; i < 100 && isFinite(x) && x > -1; i++) {
+    const y = f(x), h = 1e-6 * Math.max(1e-4, Math.abs(x)), d = (f(x + h) - f(x - h)) / (2 * h);
+    if (!isFinite(y) || !isFinite(d) || d === 0) break;
+    const nx = x - y / d;
+    if (Math.abs(nx - x) < 1e-13 * Math.max(1, Math.abs(x)) && Math.abs(f(nx)) <= 1e-7 * scale) return nx;
+    x = nx;
+  }
+  const grid = [-0.99, -0.9, -0.5, -0.2, -0.1, -0.05, -0.01, 0, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10];
+  for (let k = 0; k + 1 < grid.length; k++) {
+    let lo = grid[k], hi = grid[k + 1], flo = f(lo);
+    const fhi = f(hi);
+    if (!isFinite(flo) || !isFinite(fhi) || flo * fhi > 0) continue;
+    for (let i = 0; i < 200; i++) {
+      const mid = (lo + hi) / 2, fm = f(mid);
+      if (fm === 0 || hi - lo < 1e-15) return mid;
+      if (flo * fm < 0) { hi = mid; } else { lo = mid; flo = fm; }
+    }
+    return (lo + hi) / 2;
+  }
+  throw sheetErr("#NUM");
+}
+const SHEET_FN = {
+  SUM: (a) => sheetNums(a).reduce((s, x) => s + x, 0),
+  AVERAGE: (a) => { const v = sheetNums(a); if (!v.length) throw sheetErr("#DIV/0"); return v.reduce((s, x) => s + x, 0) / v.length; },
+  MIN: (a) => { const v = sheetNums(a); return v.length ? Math.min(...v) : 0; },
+  MAX: (a) => { const v = sheetNums(a); return v.length ? Math.max(...v) : 0; },
+  ROUND: (a) => sheetRound(sheetArg(a, 0), sheetOpt(a, 1, 0), false),
+  ROUNDUP: (a) => sheetRound(sheetArg(a, 0), sheetOpt(a, 1, 0), true),
+  INT: (a) => Math.floor(sheetArg(a, 0)),
+  ABS: (a) => Math.abs(sheetArg(a, 0)),
+  EXP: (a) => Math.exp(sheetArg(a, 0)),
+  IF: null,   // evaluated lazily in sheetCall
+  SUMPRODUCT: (a) => {
+    if (!a.length) throw sheetErr("#ERROR");
+    const arrs = a.map(x => Array.isArray(x) ? x : sheetShaped([sheetToNum(x)], 1, 1));
+    const s0 = arrs[0];
+    if (arrs.some(x => x.rows !== s0.rows || x.cols !== s0.cols)) throw sheetErr("#VALUE");
+    let s = 0;
+    for (let i = 0; i < s0.length; i++) { let p = 1; for (const x of arrs) p *= typeof x[i] === "number" ? x[i] : 0; s += p; }
+    return s;
+  },
+  PMT: (a) => {
+    const r = sheetArg(a, 0), n = sheetArg(a, 1), pv = sheetArg(a, 2), fv = sheetOpt(a, 3, 0), t = sheetOpt(a, 4, 0) ? 1 : 0;
+    if (n === 0) throw sheetErr("#NUM");
+    if (r === 0) return -(pv + fv) / n;
+    const g = Math.pow(1 + r, n);
+    return -(r * (fv + pv * g)) / ((1 + r * t) * (g - 1));
+  },
+  FV: (a) => {
+    const r = sheetArg(a, 0), n = sheetArg(a, 1), pmt = sheetArg(a, 2), pv = sheetOpt(a, 3, 0), t = sheetOpt(a, 4, 0) ? 1 : 0;
+    if (r === 0) return -(pv + pmt * n);
+    const g = Math.pow(1 + r, n);
+    return -(pv * g + pmt * (1 + r * t) * (g - 1) / r);
+  },
+  PV: (a) => {
+    const r = sheetArg(a, 0), n = sheetArg(a, 1), pmt = sheetArg(a, 2), fv = sheetOpt(a, 3, 0), t = sheetOpt(a, 4, 0) ? 1 : 0;
+    if (r === 0) return -(fv + pmt * n);
+    const g = Math.pow(1 + r, n);
+    return -(fv + pmt * (1 + r * t) * (g - 1) / r) / g;
+  },
+  NPER: (a) => {
+    const r = sheetArg(a, 0), pmt = sheetArg(a, 1), pv = sheetArg(a, 2), fv = sheetOpt(a, 3, 0), t = sheetOpt(a, 4, 0) ? 1 : 0;
+    if (r === 0) { if (pmt === 0) throw sheetErr("#NUM"); return -(pv + fv) / pmt; }
+    const k = pmt * (1 + r * t), q = (k - fv * r) / (k + pv * r);
+    if (!(q > 0) || r <= -1) throw sheetErr("#NUM");
+    return Math.log(q) / Math.log(1 + r);
+  },
+  RATE: (a) => {
+    const n = sheetArg(a, 0), pmt = sheetArg(a, 1), pv = sheetArg(a, 2), fv = sheetOpt(a, 3, 0), t = sheetOpt(a, 4, 0) ? 1 : 0, guess = sheetOpt(a, 5, 0.1);
+    if (n <= 0) throw sheetErr("#NUM");
+    const f = (x) => { if (Math.abs(x) < 1e-10) return pv + pmt * n + fv; const g = Math.pow(1 + x, n); return pv * g + pmt * (1 + x * t) * (g - 1) / x + fv; };
+    return sheetSolve(f, guess, Math.max(1, Math.abs(pv) + Math.abs(pmt) * n + Math.abs(fv)));
+  },
+};
+function sheetEval(expr, seen) {
+  const v = sheetEvalNode(sheetParse(expr), seen);
+  if (Array.isArray(v)) throw sheetErr("#VALUE");
+  if (v === null || v === undefined) return 0;     // =A1 with A1 blank shows 0, as in Excel
+  if (typeof v === "number") return sheetFinite(v);
+  return v;
+}
+function sheetFormat(v) {
+  if (typeof v === "boolean") return v ? "TRUE" : "FALSE";
+  if (typeof v !== "number") return String(v);
+  let x = Number(v.toPrecision(10));               // up to 10 significant digits, like Excel's General format
+  if (Math.abs(x) < 5e-11) x = 0;
+  for (let d = 10; d >= 0; d--) {                  // only as many decimals as fit the cell, so no digit is cut off
+    const s = x.toLocaleString(undefined, { maximumFractionDigits: d });
+    if (s.length <= 11) return s;
+  }
+  return x.toExponential(4);
+}
+function sheetRender() {
+  sheetMemo = new Map();
+  try {
+    for (const c of SHEET_COLS) for (let r = 1; r <= SHEET_ROWS; r++) {
+      const id = c + r, inp = sheetCellInput(id);
+      if (!inp || document.activeElement === inp) continue;
+      inp.classList.remove("err");
+      if (sheet[id] === undefined) { inp.value = ""; continue; }
+      try { inp.value = sheetFormat(sheetValue(id, new Set())); }
+      catch (err) { inp.value = String(err.message).startsWith("#") ? err.message : "#ERROR"; inp.classList.add("err"); }
+    }
+  } finally { sheetMemo = null; }
+}
+function sheetSave() {
+  if (!currentState) return;
+  currentState.sheet = sheet;
+  saveState(currentKey, currentState);
+}
+function sheetLoad() {
+  sheet = (currentState && currentState.sheet) || {};
+  sheetRender();
+}
+(function initSheet() {
+  sheetBuild();
+  SHEET_HINT = document.getElementById("sheetHint").innerHTML;
+  const panel = document.getElementById("sheetPanel"), header = document.getElementById("sheetHeader");
+  let dragging = false, ox = 0, oy = 0;
+  header.addEventListener("mousedown", (e) => {
+    if (e.target.tagName === "BUTTON") return;
+    dragging = true; const r = panel.getBoundingClientRect(); ox = e.clientX - r.left; oy = e.clientY - r.top;
+  });
+  document.addEventListener("mousemove", (e) => {
+    if (!dragging) return; panel.style.left = (e.clientX - ox) + "px"; panel.style.top = (e.clientY - oy) + "px";
+  });
+  document.addEventListener("mouseup", () => { dragging = false; });
+})();
+
+// =================== KILL DATE ===================
+function enforceKillDate() {
+  if (QUIZ_KILL_ISO && new Date() >= new Date(QUIZ_KILL_ISO)) {
+    quizActive = false;
+    document.querySelector(".wrap").innerHTML = `
+      <header class="banner"><h1>Exam Closed</h1>
+      <p></p></header>`;
+    return true;
+  }
+  return false;
+}
+(function showSebStatus() {
+  const el = document.getElementById("sebStatus");
+  const check = new URLSearchParams(location.search).has("check");
+  if (IN_SEB) {
+    el.innerHTML = "<strong>✅ Safe Exam Browser detected</strong>" + " Open the exam at your scheduled appointment and obtain the access code from your proctor.";
+    el.style.background = "var(--ok-bg)";
+    // inside SEB the override field stays out of sight; the proctor opens it with the small "Proctor" link
+    // (needed for a dry run before exam day and for a late start after the last-start time)
+    document.getElementById("proctorLinkRow").classList.remove("hidden");
+    document.getElementById("proctorLink").addEventListener("click", () => {
+      const row = document.getElementById("overrideRow");
+      row.classList.toggle("hidden");
+      if (!row.classList.contains("hidden")) document.getElementById("overrideCode").focus();
+    });
+  } else {
+    el.innerHTML = "<strong>⚠ Safe Exam Browser NOT detected</strong>Close this window and open the exam with the .seb file from Blackboard.";
+    el.style.background = "var(--err-bg)";
+    if (REQUIRE_SEB) document.getElementById("overrideRow").classList.remove("hidden");
+  }
+})();
+
+if (!enforceKillDate()) {
+  setInterval(enforceKillDate, 30000);
+  updateDeadlineBar();
+  setInterval(updateDeadlineBar, 30000);
+}
+</script>
+</body>
+</html>

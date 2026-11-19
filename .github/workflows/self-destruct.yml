@@ -1,0 +1,35 @@
+name: Self-destruct after Midterm 2
+
+# Thu Nov 19, 2026 at 12:05 AM MT (07:05 UTC). The exam page itself stops working at
+# midnight Wednesday; this removes the files. Also runnable by hand from the Actions tab.
+on:
+  schedule:
+    - cron: "5 7 19 11 *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Replace the exam with a closed page
+        run: |
+          rm -f FIN4329_MT2_Exam.seb FIN4329_MT2_Test0.seb test0.html quit.html
+          cat > index.html <<'HTML'
+          <!doctype html><meta charset="utf-8"><meta name="robots" content="noindex,nofollow,noarchive">
+          <title>Exam closed</title>
+          <body style="font-family:Arial,sans-serif;padding:40px;background:#f7f9fc">
+          <h1>FIN 4329 Midterm Exam 2 is closed</h1>
+          <p>This exam ended on November 17, 2026. Contact your instructor with any questions.</p></body>
+          HTML
+          printf '# FIN 4329 Midterm 2 (closed)\n' > README.md
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          # Erase history too: replace main with a single new commit that holds only the closed page.
+          git checkout --orphan closed
+          git add -A
+          git commit -m "Exam closed"
+          git push --force origin closed:main
